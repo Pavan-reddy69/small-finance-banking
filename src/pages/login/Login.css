@@ -1,0 +1,24 @@
+.p-4 {
+  background-image: url('../../assests/1.jpg'); 
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin: 0;
+  padding: 0;
+}
+.my-5 {
+
+  color: white;
+}
+.rounded-start1{
+height: 350px;
+width:650px;
+}
+.rounded-start{
+ 
+  padding-bottom: 20px;
+}
+
+.mb-0{
+  color: black;
+}
