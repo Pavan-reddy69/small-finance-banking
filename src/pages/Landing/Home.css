@@ -1,3 +1,6 @@
+.hom{
+  overflow: hidden;
+}
 .marquee-container {
     margin-top: 10px;
     position: relative;

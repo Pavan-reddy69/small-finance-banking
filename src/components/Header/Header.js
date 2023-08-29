@@ -4,6 +4,7 @@ import logoImage from '../../assests/logo.png';
 import './Header.css'; 
 
 function Header() {
+  
   return (
     <div className="nav">
       <img className='logo' decoding="async" src={logoImage} alt="Logo" />

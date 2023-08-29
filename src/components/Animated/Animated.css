@@ -1,0 +1,48 @@
+/* Define keyframes for the floating animation */
+@keyframes floating {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  
+  
+  .lady-animating.floating {
+    animation: floating 3s ease-in-out infinite;
+  }
+  
+  /* Style for WebP images */
+  .lady-animating {
+    
+    display: flex;
+    align-items: center;
+    justify-content:center;
+    height: 90vh;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .lady-animating img {
+    display: block;
+    position: absolute;
+    height: 120%;
+    z-index: 2;
+  }
+  
+  .mob-disp-desk{
+    width: 800px ;
+  }
+
+  .text-below-image{
+    font-family: "Open Sans", sans-serif;
+    margin-top: -80px;
+    display: flex;
+    align-items: center;
+    justify-content:center;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+  }

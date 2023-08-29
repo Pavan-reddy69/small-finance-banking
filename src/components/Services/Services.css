@@ -21,9 +21,14 @@
     text-align: left;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   }
+  .better-services h2 {
+    margin-top: 0;
+    color: #F03325;
+  }
   
   .service-card h3 {
     margin-top: 0;
+    color: #FF3333;
   }
   
   /* Responsive styling for smaller screens */

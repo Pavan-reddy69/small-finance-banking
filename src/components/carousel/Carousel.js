@@ -3,8 +3,8 @@ import 'bootstrap/dist/css/bootstrap.css';
 import { Carousel } from 'react-bootstrap';
 import './Carousel.css'; 
 
-import image3 from '../../assests/highest-fd-interest-rates.jpg';
-import image2 from '../../assests/bumper-announcement (1).png';
+import image3 from '../../assests/newproductpage-activmoney-d.jpg';
+import image2 from '../../assests/Screenshot 2023-08-26 231914.png';
 import image1 from '../../assests/bank.png';
 
 const SimpleCarousel = () => {

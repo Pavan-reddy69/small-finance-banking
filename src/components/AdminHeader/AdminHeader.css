@@ -1,0 +1,97 @@
+/* Sidebar Container */
+.sidebar {
+    width: 60px;
+    min-height: 100vh;
+    background-color: #000000;
+    color: white;
+    transition: width 0.3s;
+    top: 0;
+    left: 0;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    padding-top: 1rem;
+    border-radius: 1px;
+  }
+  
+  .sidebar.open {
+    width: 250px;
+  }
+  
+  /* Hamburger Icon */
+  .hamburger {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  /* Sidebar Content */
+  .sidebar-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    height: 100%;
+    margin-top: 40px;
+    font-size: large;
+  }
+  
+  /* Sidebar Links */
+  .sidebar-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: white;
+    font-weight: 600;
+    padding: 1rem;
+    transition: background-color 0.3s;
+  }
+  
+  .sidebar-link:hover {
+    background-color: #189b92;
+  }
+  
+  /* Sidebar Icons */
+  .sidebar-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 0.5rem;
+  }
+  
+  /* Logout Button */
+  .logout {
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: white;
+    font-weight: 600;
+    padding: 1rem;
+    transition: background-color 0.3s;
+  }
+  
+  .logout:hover {
+    background-color: #189b92;
+  }
+  
+  /* Sidebar Toggle Button */
+  .sidebar-toggle {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0.5rem;
+    transition: transform 0.3s;
+  }
+  
+  .sidebar-toggle.open {
+    transform: translateY(200px);
+  }
+  
+  /* Sidebar Toggle Bar */
+  .bar {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    margin: 2px 0;
+  }
+  

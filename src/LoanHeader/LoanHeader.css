@@ -1,0 +1,45 @@
+
+.tab-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .tabs-header {
+    display: flex;
+    background-color: #000000;
+    
+    color: rgb(255, 255, 255);
+  }
+  
+  .tab {
+    
+    flex-grow: 1;
+    padding: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .tab:hover {
+    background-color: #ffffff; /* Grey background on hover */
+    transition: all ease-in-out 450ms;
+    color: #000000  ;
+  }
+  
+  .tab.active {
+    background-color: #ffffff; /* White background when active */
+    transition: background-color 0.3s, transform 0.3s; /* Add transform property */
+    transform: translateX(0); /* Initialize to 0 position */
+    color: #000000;
+  }
+  
+  .slide-active {
+    transform: translateX(calc(100% + 20px)); /* Slide to the right */
+  }
+  .tab-content {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 20px; /* Optional: Add padding for spacing */
+  }
+  

@@ -1,0 +1,30 @@
+.donut-chart-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+   height: 300px;
+    width: 500px;
+    margin: 0 auto;
+  }
+  
+  .donut-chart {
+    width: 150px;
+    height: 150px;
+    position: relative;
+  }
+  
+  .donut-chart::after {
+    content: '';
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: white;
+    position: absolute;
+    top: 25px;
+    left: 25px;
+  }
+  
+  .chart-text {
+    text-align: center;
+  }
+  

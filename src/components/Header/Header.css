@@ -69,17 +69,17 @@
     margin-left: 2vw;
     font-size:1rem;
     cursor:pointer;
-    background-color: transparent;
-    border:1.5px solid #000000;
+    background-color: #EE1818;
+    border:1.5px solid #EE1818;
     border-radius: 2em;
-    color: #210d69;
+    color: #fff;
 }
 
 .login-button:hover{
-    color:#fff;
-    background-color: #210d69;
-    border:1.5px solid #210d69;
-    transition: all ease-in-out 350ms;
+  background-color: #c00404;
+  color: white;
+  border: 1.5px solid #5b0606;
+  transition: all ease-in-out 350ms;
 }
   
   /* Media Query for 800px */

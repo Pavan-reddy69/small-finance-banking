@@ -6,7 +6,7 @@ import './Signup.css';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 
-
+import api from '../../Api/api';
 const steps = ['User Information', 'Upload Images', 'Review Details', 'Success'];
 
 const SignUpPage = () => {
@@ -40,7 +40,7 @@ const SignUpPage = () => {
 
     const handleSignUp = async () => {
         try {
-            const formSubmissionResponse = await axios.post('http://five-parrots-care.loca.lt/Account/create', formData);
+            const formSubmissionResponse = await axios.post(api+'Account/create', formData);
             console.log('API response:', formSubmissionResponse.data);
             // First, upload the images
             const formDataForImages = new FormData();
@@ -48,7 +48,7 @@ const SignUpPage = () => {
             formDataForImages.append('file2', formData.panImage);
             formDataForImages.append('file3', formData.userPhoto);
             formDataForImages.append('userName',formData.email)
-            const imageUploadResponse = await axios.put('http://five-parrots-care.loca.lt/user/uploadImage', formDataForImages);
+            const imageUploadResponse = await axios.put(api+'user/uploadImage', formDataForImages);
             console.log('Image upload response:', imageUploadResponse.data);
     
            
