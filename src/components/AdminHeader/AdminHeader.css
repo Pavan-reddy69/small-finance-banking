@@ -2,8 +2,8 @@
 .sidebar {
     width: 60px;
     min-height: 100vh;
-    background-color: #000000;
-    color: white;
+    background-color: white;
+    color: black;
     transition: width 0.3s;
     top: 0;
     left: 0;
@@ -11,9 +11,11 @@
     overflow-y: hidden;
     padding-top: 1rem;
     border-radius: 1px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.507);  
   }
   
   .sidebar.open {
+    
     width: 250px;
   }
   
@@ -39,14 +41,14 @@
     display: flex;
     align-items: center;
     text-decoration: none;
-    color: white;
+    color: black;
     font-weight: 600;
     padding: 1rem;
     transition: background-color 0.3s;
   }
   
   .sidebar-link:hover {
-    background-color: #189b92;
+    background-color: none;
   }
   
   /* Sidebar Icons */
@@ -70,7 +72,7 @@
   }
   
   .logout:hover {
-    background-color: #189b92;
+    background-color: none;
   }
   
   /* Sidebar Toggle Button */

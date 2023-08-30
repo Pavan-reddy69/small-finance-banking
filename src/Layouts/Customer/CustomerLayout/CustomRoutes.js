@@ -7,7 +7,7 @@ import Transactions from '../Transaction/Transaction'
 import Deposit from "../Deposit/Deposit";
 import Loan from "../Loans/Loan";
 import DepositDetailsPage from "../../../components/DepositTable/DepositDetailsPage";
-
+import ProfileComp from "../Profile/ProfileComponent";
 const Routers = () => {
     return( ( <Routes>
           <Route path="/customer-home" element={<Land />} />
@@ -16,6 +16,7 @@ const Routers = () => {
           <Route path="/transfer" element={<Transfer/>} />
           <Route path="/deposit" element={<Deposit/>} />
           <Route path="/loan" element={<Loan/>} />
+          <Route path="/profile" element={<ProfileComp/>} />
           <Route path="/deposit/:id" element={<DepositDetailsPage/>} />
     </Routes>))
   }

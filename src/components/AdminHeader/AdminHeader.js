@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   UsersIcon,
-  ClipboardDocumentCheckIcon,
   BuildingLibraryIcon,
- ArrowLeftOnRectangleIcon
+  ArrowLeftOnRectangleIcon
 } from "@heroicons/react/24/solid";
 import "./AdminHeader.css";
-import logoImage from '../../assests/header-removebg-preview.png';
+import logoImage from '../../assests/logo.png';
 
 export function AdminHeader() {
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation(); // Get the current location
 
   const updateSidebarState = () => {
     if (window.innerWidth <= 800) {
@@ -55,22 +55,21 @@ export function AdminHeader() {
 
       <div className="sidebar-content">
         <Link
-          to="/customer-home"
-          className="sidebar-link"
+          to="/admin-home"
+          className={`sidebar-link ${location.pathname === "/admin-home" ? "selected" : ""}`}
           onClick={closeSidebar}
         >
           <UsersIcon className="sidebar-icon" />
           Users
         </Link>
-        <Link to="/loan" className="sidebar-link" onClick={closeSidebar}>
+        <Link
+          to="/loans"
+          className={`sidebar-link ${location.pathname === "/loans" ? "selected" : ""}`}
+          onClick={closeSidebar}
+        >
           <BuildingLibraryIcon className="sidebar-icon" />
           Loan
-        </Link>
-        <Link to="/deposit" className="sidebar-link" onClick={closeSidebar}>
-          <ClipboardDocumentCheckIcon className="sidebar-icon" />
-          KYC
-        </Link>
-      
+        </Link>      
         <Link
           to="/login"
           className="logout"

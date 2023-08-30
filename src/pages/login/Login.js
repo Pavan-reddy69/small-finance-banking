@@ -10,9 +10,8 @@ import {
   MDBInput,
   MDBCardImage
 } from 'mdb-react-ui-kit';
-import img1 from '../../assests/highest-fd-interest-rates.jpg';
 import './Login.css';
-import img2 from '../../assests/logo.png';
+import img2 from '../../assests/logo-removebg-preview (1).png';
 import api from '../../Api/api';
 
 function Login() {
@@ -22,16 +21,16 @@ function Login() {
 
   const handleLogin = async () => {
     console.log('Logging in with:', emailOrAccount);
-  
+
     try {
       console.log('Email or Account:', emailOrAccount);
       console.log('Password:', password);
-  
+
       const loginData = {
         accountNumber: emailOrAccount, // Treat email as accountNumber
         password: password,
       };
-  
+
       const response = await fetch(api + 'user/login', {
         method: 'POST',
         headers: {
@@ -39,7 +38,7 @@ function Login() {
         },
         body: JSON.stringify(loginData),
       });
-  
+
       if (response.ok) {
         const data = await response.json();
         sessionStorage.setItem('userDetails', JSON.stringify(data));
@@ -56,8 +55,8 @@ function Login() {
       console.error('Error during login:', error);
     }
   };
-  
-  
+
+
 
   return (
     <MDBContainer fluid className='login p-4'>
@@ -78,7 +77,7 @@ function Login() {
               <MDBInput
                 onChange={(e) => setEmailOrAccount(e.target.value)}
                 wrapperClass='mb-4'
-                label={isManagerLogin ? 'Email' : 'Account Number'}
+                label={isManagerLogin ? 'User Name' : 'Account Number'}
                 id='form1'
                 type='text'
                 pattern={isManagerLogin ? undefined : "[0-9]{16}"}
@@ -112,23 +111,22 @@ function Login() {
                 </p>
                 <p className="mb-0">
                   {isManagerLogin ? (
-                    <a
-                      href="#"
-                      className="text-black-50 fw-bold"
+                    <span
+                      className="text-black-50 fw-bold cursor-pointer"
                       onClick={() => setIsManagerLogin(false)}
                     >
                       Customer Login
-                    </a>
+                    </span>
                   ) : (
-                    <a
-                      href="#"
-                      className="text-black-50 fw-bold"
+                    <span
+                      className="text-black-50 fw-bold cursor-pointer"
                       onClick={() => setIsManagerLogin(true)}
                     >
                       Manager Login
-                    </a>
+                    </span>
                   )}
                 </p>
+
               </div>
             </MDBCardBody>
           </MDBCard>

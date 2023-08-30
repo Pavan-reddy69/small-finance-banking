@@ -69,14 +69,14 @@
     margin-left: 2vw;
     font-size:1rem;
     cursor:pointer;
-    background-color: #EE1818;
-    border:1.5px solid #EE1818;
-    border-radius: 2em;
+    background-color: #0D6EFD;
+    border:1.5px solid #0D6EFD;
+    border-radius: 1rem;
     color: #fff;
 }
 
 .login-button:hover{
-  background-color: #c00404;
+  background-color: #043a8a;
   color: white;
   border: 1.5px solid #5b0606;
   transition: all ease-in-out 350ms;

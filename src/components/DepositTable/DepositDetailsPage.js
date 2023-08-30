@@ -13,7 +13,7 @@ const DepositDetailsPage = ({ deposit }) => {
   useEffect(() => {
     const fetchFDDetails = async () => {
       try {
-        const response = await fetch(api + 'fd/getbyId?id='+id); // Update the API endpoint
+        const response = await fetch(api + 'fd/getbyId?id='+id); 
         const data = await response.json();
         setFDDetails(data);
       } catch (error) {

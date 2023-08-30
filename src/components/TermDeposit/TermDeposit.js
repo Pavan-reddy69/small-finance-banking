@@ -18,7 +18,6 @@ const TermDeposit = () => {
         const data = await response.json();
         setBalance(data);
 
-        // Update local storage with the retrieved balance
         storedUserData.balance = data;
         sessionStorage.setItem('userDetails', JSON.stringify(storedUserData));
       } catch (error) {
@@ -39,7 +38,7 @@ const TermDeposit = () => {
       'ONE_MONTH': 1.5,
       'THREE_MONTHS': 3.5,
       'SIX_MONTHS': 5.0,
-      'ONE_YEAR': 8.0,
+      'ONE_YEAR': 8.5,
     };
     setInterest(interestRates[event.target.value]);
   };
@@ -55,7 +54,7 @@ const TermDeposit = () => {
           tenures: tenure,
           amount: amount
         };
-        console.log('Creating new FD:', depositData); // Log the deposit data
+        console.log('Creating new FD:', depositData);   
         const response = await fetch(api + 'fd/createFixedDeposit', {
           method: 'POST',
           headers: {

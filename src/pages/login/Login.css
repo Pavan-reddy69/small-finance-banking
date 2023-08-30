@@ -1,8 +1,8 @@
 .login {
-  background-image: url('../../assests/etienne-martin-2_K82gx9Uk8-unsplash.jpg'); 
-  background-size: cover; /* This will make the image cover the entire element */
+  background-image: url('../../assests/premium_photo-1661964389510-790ce9d1a68b.avif'); 
+  background-size: cover; 
   width: 100%;
-  height: 100vh; /* Set the height to 100vh to cover the full height of the viewport */
+  height: 100vh; 
   background-position: center;
   background-repeat: no-repeat;
   margin: 0;
@@ -10,7 +10,7 @@
 }
 
 .besttext {
-  margin-top: 22rem !important;
+  margin-left: 9rem;
   color: rgb(235, 34, 34);
 }
 .rounded-start1{

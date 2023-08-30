@@ -1,6 +1,5 @@
 import React from "react";
 import Header from "../../components/Header/Header";
-import SimpleCarousel from "../../components/carousel/Carousel";
 import Testimonials from "../../components/Testimonial/Testimonial";
 import AboutSection from "../../components/About/About";
 import "./Home.css"; // Make sure to import the CSS file for this component

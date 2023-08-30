@@ -2,41 +2,56 @@ import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import axios from 'axios';
 import './UsersComponent.css';
+import api from '../../../Api/api';
 
 const columns = [
-  { field: 'id', headerName: 'Account Number', flex: 1 },
-  { field: 'name', headerName: 'Name', flex: 1 },
-  { field: 'balance', headerName: 'Balance', flex: 1 },
+  { field: 'accountNumber', headerName: 'Account Number', flex: 1 }, 
+  { field: 'userId', headerName: 'User ID', flex: 1 },
+  { field: 'firstName', headerName: 'First Name', flex: 1 },
+  { field: 'lastName', headerName: 'Last Name', flex: 1 },
+  { field: 'panCardNumber', headerName: 'PAN Card', flex: 1 },
+  {
+    field: 'kyc',
+    headerName: 'KYC Status',
+    flex: 1,
+    renderCell: (params) => {
+      const status = params.value;
+      const statusClass = status ? 'approved' : 'pending';
+      return (
+        <div className={`kyc-status ${statusClass}`}>
+          {status ? 'Approved' : 'Pending'}
+        </div>
+      );
+    },
+  },
 ];
 
 const UsersComponent = () => {
   const [users, setUsers] = useState([]);
-  const [selectedUserIds, setSelectedUserIds] = useState([]);
 
+  const generateUniqueId = () => {
+    return Math.random().toString(36).substr(2, 9); 
+  };
+  
   useEffect(() => {
-    // Fetch user data from the API
-    axios.get('https://api.example.com/users')
+    axios.get(api + 'user/getAll')
       .then(response => {
-        setUsers(response.data);
+        const usersWithIds = response.data.map(user => ({ ...user, id: generateUniqueId() }));
+        setUsers(usersWithIds);
       })
       .catch(error => {
         console.error('Error fetching user data:', error);
       });
   }, []);
 
-  const handleDeleteUsers = () => {
-    const updatedUsers = users.filter(user => !selectedUserIds.includes(user.id));
-    setUsers(updatedUsers);
-
-    // TODO: Send updated user list to the API using axios.post or axios.put
-    // Example: axios.post('https://api.example.com/updateUsers', updatedUsers);
-
-    setSelectedUserIds([]);
+  const handleRowClick = (params) => {
+    const userId = params.row.userId;
+    window.location.href = `/admin-home/${userId}`; 
   };
 
   return (
     <div className="users-container">
-      <h2>Users</h2>
+      <h2>Users List</h2>
       {users.length === 0 ? (
         <p>No users available.</p>
       ) : (
@@ -44,18 +59,11 @@ const UsersComponent = () => {
           <DataGrid
             rows={users}
             columns={columns}
-            pageSize={5}
-            rowsPerPageOptions={[5, 10, 20]}
+            pageSize={10} 
             pagination
             autoHeight
-            checkboxSelection
-            onSelectionModelChange={(selection) => setSelectedUserIds(selection)}
+            onRowClick={handleRowClick} 
           />
-          {selectedUserIds.length > 0 && (
-            <button className="delete-button" onClick={handleDeleteUsers}>
-              Delete Selected Users
-            </button>
-          )}
         </div>
       )}
     </div>

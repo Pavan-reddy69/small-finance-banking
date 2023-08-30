@@ -1,0 +1,10 @@
+.Home {
+    display:flex;
+    height: 100vh;
+    flex-direction: column;
+  }
+  
+  .sidebar-and-details {
+    display: flex;
+    flex: 1;  
+  }

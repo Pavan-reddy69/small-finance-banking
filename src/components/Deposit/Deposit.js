@@ -38,16 +38,16 @@ export default function DepositTab() {
         storedUserData.balance = newBalance;
         sessionStorage.setItem("userDetails", JSON.stringify(storedUserData));
 
-        setAmount(""); // Clear the amount input field
-        alert("Deposit successful!"); // Show a success alert
+        setAmount(""); 
+        alert("Deposit successful!"); 
       } else {
         setError("Error processing deposit");
-        alert("Deposit failed. Please try again."); // Show an error alert
+        alert("Deposit failed. Please try again."); 
       }
     } catch (error) {
       console.error("Deposit error:", error);
       setError("Error processing deposit");
-      alert("An error occurred while processing deposit. Please try again."); // Show an error alert
+      alert("An error occurred while processing deposit. Please try again."); 
     }
   };
 

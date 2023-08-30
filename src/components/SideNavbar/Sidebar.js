@@ -1,18 +1,20 @@
+// DefaultSidebar.js
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   HomeIcon,
   CreditCardIcon,
   CurrencyRupeeIcon,
   Cog6ToothIcon,
   BuildingLibraryIcon,
- ArrowLeftOnRectangleIcon
+  ArrowLeftOnRectangleIcon
 } from "@heroicons/react/24/solid";
 import "./Sidebar.css";
-import logoImage from '../../assests/header-removebg-preview.png';
+import logoImage from '../../assests/logo.png';
 
 export function DefaultSidebar() {
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation(); // Get the current location
 
   const updateSidebarState = () => {
     if (window.innerWidth <= 800) {
@@ -58,7 +60,7 @@ export function DefaultSidebar() {
       <div className="sidebar-content">
         <Link
           to="/customer-home"
-          className="sidebar-link"
+          className={`sidebar-link ${location.pathname === "/customer-home" ? "selected" : ""}`}
           onClick={closeSidebar}
         >
           <HomeIcon className="sidebar-icon" />
@@ -66,21 +68,33 @@ export function DefaultSidebar() {
         </Link>
         <Link
           to="/transactions"
-          className="sidebar-link"
+          className={`sidebar-link ${location.pathname === "/transactions" ? "selected" : ""}`}
           onClick={closeSidebar}
         >
           <CreditCardIcon className="sidebar-icon" />
           Transaction
         </Link>
-        <Link to="/loan" className="sidebar-link" onClick={closeSidebar}>
+        <Link
+          to="/loan"
+          className={`sidebar-link ${location.pathname === "/loan" ? "selected" : ""}`}
+          onClick={closeSidebar}
+        >
           <BuildingLibraryIcon className="sidebar-icon" />
           Loan
         </Link>
-        <Link to="/deposit" className="sidebar-link" onClick={closeSidebar}>
+        <Link
+          to="/deposit"
+          className={`sidebar-link ${location.pathname === "/deposit" ? "selected" : ""}`}
+          onClick={closeSidebar}
+        >
           <CurrencyRupeeIcon className="sidebar-icon" />
           Deposit
         </Link>
-        <Link to="/settings" className="sidebar-link" onClick={closeSidebar}>
+        <Link
+          to="/profile"
+          className={`sidebar-link ${location.pathname === "/profile" ? "selected" : ""}`}
+          onClick={closeSidebar}
+        >
           <Cog6ToothIcon className="sidebar-icon" />
           Settings
         </Link>
