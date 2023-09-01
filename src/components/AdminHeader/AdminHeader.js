@@ -5,7 +5,7 @@ import {
   BuildingLibraryIcon,
   ArrowLeftOnRectangleIcon
 } from "@heroicons/react/24/solid";
-import "../../components/SideNavbar/Sidebar.css";
+import "./AdminHeader.css"; // Use the same CSS file as DefaultSidebar
 import logoImage from "../../assests/logo.png";
 
 export function AdminHeader() {
@@ -26,9 +26,9 @@ export function AdminHeader() {
   };
 
   return (
-    <div className="updated-sidebar">
+    <div className="sidebar"> {/* Use the same "sidebar" class */}
       <img className="logo-header" decoding="async" src={logoImage} alt="Logo" />
-      <div className="updated-sidebar-content">
+      <div className="sidebar-content"> {/* Use the same "sidebar-content" class */}
         <Link
           to="/admin-home"
           className={`sidebar-link ${
@@ -49,7 +49,7 @@ export function AdminHeader() {
         </Link>
         <Link
           to="/login"
-          className="sidebar-link"
+          className="logout"
           onClick={() => handleLogout()}
         >
           <ArrowLeftOnRectangleIcon className="sidebar-icon" />

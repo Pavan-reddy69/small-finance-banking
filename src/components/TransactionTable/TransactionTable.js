@@ -19,6 +19,7 @@ const TransactionTable = () => {
         console.error("Error fetching transactions:", error);
       }
     };
+    
 
     fakeApiCall(); 
   }, []);
