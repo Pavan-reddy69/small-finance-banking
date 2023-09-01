@@ -1,3 +1,3 @@
-const api = "https://deep-things-send.loca.lt/";
+const api = "http://localhost:8080/";
 
 export default api;

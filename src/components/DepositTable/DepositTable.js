@@ -9,7 +9,7 @@ import {
   Box
 } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
-
+import Swal from 'sweetalert2';
 import api from "../../Api/api";
 import DepositDetailsPage from './DepositDetailsPage';
 
@@ -48,8 +48,16 @@ const DepositHistoryTable = () => {
     page * rowsPerPage + rowsPerPage
   );
 
-  const handleRowClick = depositId => {
-    navigate(`/deposit/${depositId}`); 
+  const handleRowClick = (depositId, isRid) => {
+    if (isRid) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'No More Details of Recurring Deposit',
+      });
+    } else {
+      navigate(`/deposit/${depositId}`);
+    }
   };
   return (
     <Box textAlign="center">
@@ -72,7 +80,7 @@ const DepositHistoryTable = () => {
             displayedDepositHistory.map((deposit) => (
               <TableRow
                 key={deposit.fdId}
-                onClick={() => handleRowClick(deposit.fdId || deposit.rid)} 
+                onClick={() => handleRowClick(deposit.fdId || deposit.rid, !!deposit.rid)}
                 style={{ cursor: "pointer" }} 
               >
                 <TableCell>{deposit.fdId || deposit.rid}</TableCell>

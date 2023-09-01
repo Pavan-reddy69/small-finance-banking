@@ -3,8 +3,12 @@ import { Stepper, Step, StepLabel, Button, Typography, TextField } from '@mui/ma
 import EducationHistoryTable from './EducationTable';
 import './Education.css';
 import api from '../../../Api/api';
+import Swal from 'sweetalert2';
+import { Alert } from '@mui/material';
 
 function EducationLoanComponent() {
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [successMsg, setSuccessMsg] = useState(null);
   const [tableRefresh, setTableRefresh] = useState(false);
   const [loanAmount, setLoanAmount] = useState(0);
   const [tenure, setTenure] = useState(0);
@@ -38,15 +42,15 @@ function EducationLoanComponent() {
 
       if (otpResponse.ok) {
         setOtpSent(true);
-        alert("OTP generated successfully!");
+        setSuccessMsg("OTP generated successfully!");
       } else {
         setError("Error generating OTP");
-        alert("Failed to generate OTP. Please try again.");
+        setErrorMsg("Failed to generate OTP. Please try again.");
       }
     } catch (error) {
       console.error("OTP generation error:", error);
       setError("Error generating OTP");
-      alert("An error occurred while generating OTP. Please try again.");
+      setErrorMsg("An error occurred while generating OTP. Please try again.");
     }
   };
 
@@ -71,11 +75,19 @@ function EducationLoanComponent() {
       }
 
       setOtpVerified(true);
-      alert("OTP verified successfully!");
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: "OTP verified successfully!",
+      });
     } catch (error) {
       console.error("OTP verification error:", error);
       setError("Error verifying OTP");
-      alert("An error occurred while verifying OTP. Please try again.");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'An error occurred while verifying OTP. Please try again.',
+      });
     }
   };
 
@@ -88,7 +100,7 @@ function EducationLoanComponent() {
         type: "EDUCATION_LOAN",
         tenure: tenure,
       };
-
+  
       fetch(api + 'loan/apply', {
         method: "POST",
         headers: {
@@ -98,31 +110,75 @@ function EducationLoanComponent() {
       })
         .then(response => {
           if (!response.ok) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'An error occurred while applying Loan. Please try again.',
+            });
             throw new Error('Network response was not ok');
           }
           return response.json();
         })
         .then(data => {
-          alert("Education Loan application successful!");
-          setActiveStep(0);
-          setLoanAmount('');
-          setTenure('');
-          setOtpSent(false);
-          setOtpVerified(false)
-          console.log("Loan application successful:", data);
-      
+          const loanId = data.loanId;
+          console.log('Loan ID:', loanId);
+          uploadPDFs(loanId);
         })
         .catch(error => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error applying for loan',
+          });
           console.error("Error applying for loan:", error);
-         
         });
     } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Please verify OTP before applying for the loan.',
+      });
       console.log("Please verify OTP before applying for the loan.");
     }
   };
-
-
-
+  
+  const uploadPDFs = (loanId) => {
+    const formData = new FormData();
+    formData.append('file1', collegeAdmissionFile);
+    formData.append('file2', houseDocumentsFile);
+    formData.append('id', loanId);
+  
+    fetch(api + `loan/uploadSuppliments`, {
+      method: "PUT",
+      body: formData,
+    })
+      .then(response => {
+        if (response.ok) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: "Loan application and PDFs uploaded successfully!",
+          });
+          console.log("Loan application and PDFs uploaded successfully");
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'An error occurred while uploading PDFs. Please try again.',
+          });
+          console.error("Error uploading PDFs");
+        }
+      })
+      .catch(error => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'An error occurred while uploading PDFs. Please try again.',
+        });
+        console.error("Error uploading PDFs:", error);
+      });
+  };
+  
   const [activeStep, setActiveStep] = useState(0);
 
   const handleNext = () => {
@@ -138,6 +194,20 @@ function EducationLoanComponent() {
 
   return (
     <div>
+       {errorMsg && (
+        <div className='otperror' style={{marginTop:"-10px",paddingBottom:"10px"}}>
+          <Alert severity="error" onClose={() => setErrorMsg(null)}>
+            {errorMsg}
+          </Alert>
+        </div>
+      )}
+      {successMsg && (
+        <div className='otpsuccess'>
+          <Alert severity="success" onClose={() => setSuccessMsg(null)}>
+            {successMsg}
+          </Alert>
+        </div>
+      )}
       <EducationHistoryTable tableRefresh={tableRefresh} refreshTable={refreshTable} />
       <div className="sign-container">
 
@@ -181,14 +251,14 @@ function EducationLoanComponent() {
               <input
                 label="College Admission File"
                 type="file"
-                accept=".pdf"
+                accept=".jpg"
                 onChange={e => setCollegeAdmissionFile(e.target.files[0])}
                 style={{ marginBottom: '20px' }}
               />
               <input
                 label="House Documents"
                 type="file"
-                accept=".pdf"
+                accept=".jpg"
                 onChange={e => setHouseDocumentsFile(e.target.files[0])}
                 style={{ marginBottom: '20px' }}
               />
@@ -215,17 +285,19 @@ function EducationLoanComponent() {
           )}
 
           {activeStep === 2 && (
-            <div>
+            <div className='Apply-loan'>
               <Typography variant="h5">Review and Submit</Typography>
               <p>Loan Amount: {loanAmount}</p>
               <p>Tenure: {tenure} Years</p>
               {collegeAdmissionFile && <p>Salary Slip: {collegeAdmissionFile.name}</p>}
               {houseDocumentsFile && <p>House Documents: {houseDocumentsFile.name}</p>}
-              <Button className="button next" onClick={applyForLoan} disabled={!otpVerified}>
+             
+              <div className="button-container">
+
+                <Button className="button back" onClick={handleBack}>Back</Button>
+                <Button className="button next" onClick={applyForLoan} disabled={!otpVerified}>
                 Apply for Loan
               </Button>
-              <div className="button-container">
-                <Button className="button back" onClick={handleBack}>Back</Button>
               </div>
             </div>
           )}

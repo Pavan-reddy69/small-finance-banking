@@ -55,7 +55,7 @@ const DepositDetailsPage = ({ deposit }) => {
       <div className="deposit-details-content">
         <h2>Deposit Details</h2>
 
-        {/* Display FD details */}
+       
         {fdDetails ? (
           <div className="details">
             <p>ID: {fdDetails.fdId || fdDetails.rid}</p>
