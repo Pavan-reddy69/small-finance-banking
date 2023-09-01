@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Stepper, Step, StepLabel, Button, Typography, TextField } from '@mui/material';
 import PersonalHistoryTable from './MortgageTable';
 import './MortgageLoan.css';
@@ -23,7 +23,7 @@ function PersonalLoanComponent() {
   const refreshTable = () => {
     setTableRefresh(true);
   }
- 
+
   const generateOTP = async () => {
     setError(null);
 
@@ -90,7 +90,7 @@ function PersonalLoanComponent() {
         type: "PERSONAL_LOAN",
         tenure: tenure,
       };
-  
+
       fetch(api + 'loan/apply', {
         method: "POST",
         headers: {
@@ -129,7 +129,7 @@ function PersonalLoanComponent() {
 
   const handleNext = () => {
     if (activeStep === 0) {
-    
+
     }
     setActiveStep(prevActiveStep => prevActiveStep + 1);
   };
@@ -141,91 +141,96 @@ function PersonalLoanComponent() {
   return (
     <div>
       <PersonalHistoryTable tableRefresh={tableRefresh} refreshTable={refreshTable} />
-    <div className="sign-container">
-    
-      <h3>Apply for Personal Loan</h3>
-      <Stepper activeStep={activeStep} alternativeLabel>
-        {steps.map(label => (
-          <Step key={label}>
-            <StepLabel>{label}</StepLabel>
-          </Step>
-        ))}
-      </Stepper>
+      <div className="sign-container">
 
-      <div className="sign-contain">
-        {activeStep === 0 && (
-          <div className='loan-details'>
-            <Typography variant="h5">Loan Details</Typography>
-            <TextField
-            className='textfield'
-              type="number"
-              label="Loan Amount"
-              value={loanAmount}
-              onChange={e => setLoanAmount(e.target.value)}
-              
-            />
-            <TextField
-              className='textfield'
-              type="number"
-              label="Tenure (Years)"
-              value={tenure}
-              onChange={e => setTenure(e.target.value)}
-            />
-            <div className="button-container">
-              <Button className="button next" onClick={handleNext}>Next</Button>
-            </div>
-          </div>
-        )}
+        <h3>Apply for Personal Loan</h3>
+        <Stepper activeStep={activeStep} alternativeLabel>
+          {steps.map(label => (
+            <Step key={label}>
+              <StepLabel>{label}</StepLabel>
+            </Step>
+          ))}
+        </Stepper>
 
-        {activeStep === 1 && (
-          <div>
-            <Typography variant="h5">Upload Documents</Typography>
-            <input
-              type="file"
-              accept=".pdf"
-              onChange={e => setSalarySlip(e.target.files[0])}
-            />
-            <input
-              type="file"
-              accept=".pdf"
-              onChange={e => setHouseDocumentsFile(e.target.files[0])}
-            />
-            {otpSent && (
-              <div>
-                <TextField
-                  className="form-control"
-                  label="Enter OTP"
-                  value={otp}
-                  onChange={e => setOtp(e.target.value)}
-                />
-                <Button className="button next" onClick={verifyOTP}>Verify OTP</Button>
+        <div className="sign-contain">
+          {activeStep === 0 && (
+            <div className='loan-details'>
+              <Typography variant="h5">Loan Details</Typography>
+              <TextField
+                className='textfield'
+                type="number"
+                label="Loan Amount"
+                value={loanAmount}
+                onChange={e => setLoanAmount(e.target.value)}
+
+              />
+              <TextField
+                className='textfield'
+                type="number"
+                label="Tenure (Years)"
+                value={tenure}
+                onChange={e => setTenure(e.target.value)}
+              />
+              <div className="button-container">
+                <Button className="button next" onClick={handleNext}>Next</Button>
               </div>
-            )}
-            {!otpSent && (
-              <Button className="button next" onClick={generateOTP}>Generate OTP</Button>
-            )}
-            <div className="button-container">
-              <Button className="button back" onClick={handleBack}>Back</Button>
-              <Button className="button next" onClick={handleNext}>Next</Button>
             </div>
-          </div>
-        )}
+          )}
 
-        {activeStep === 2 && (
-          <div>
-            <Typography variant="h5">Review and Submit</Typography>
-            {/* Display user input summary */}
-            {/* ... */}
-            <Button className="button next" onClick={applyForLoan} disabled={!otpVerified}>
-              Apply for Loan
-            </Button>
-            <div className="button-container">
-              <Button className="button back" onClick={handleBack}>Back</Button>
+          {activeStep === 1 && (
+            <div className='loan-documents'>
+              <Typography variant="h5">Upload Documents</Typography>
+              <input
+                type="file"
+                accept=".pdf"
+                onChange={e => setSalarySlip(e.target.files[0])}
+                style={{ marginBottom: '20px', margintop: '50px' }}
+              />
+              <input
+                type="file"
+                accept=".pdf"
+                onChange={e => setHouseDocumentsFile(e.target.files[0])}
+                style={{ marginBottom: '20px' }}
+              />
+              {otpSent && (
+                <div>
+                  <TextField
+                    className="form-control"
+                    label="Enter OTP"
+                    value={otp}
+                    onChange={e => setOtp(e.target.value)}
+                    style={{ marginBottom: '20px', width: '50%', paddingRight: '20px' }}
+                  />
+                  <Button className="button next" onClick={verifyOTP}>Verify OTP</Button>
+                </div>
+              )}
+              {!otpSent && (
+                <Button className="button next" onClick={generateOTP}>Generate OTP</Button>
+              )}
+              <div className="button-container">
+                <Button className="button back" onClick={handleBack}>Back</Button>
+                <Button className="button next" onClick={handleNext}>Next</Button>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+
+          {activeStep === 2 && (
+            <div>
+              <Typography variant="h5">Review and Submit</Typography>
+              <p>Loan Amount: {loanAmount}</p>
+              <p>Tenure: {tenure} Years</p>
+              {salarySlip && <p>Salary Slip: {salarySlip.name}</p>}
+              {houseDocumentsFile && <p>House Documents: {houseDocumentsFile.name}</p>}
+              <Button className="button next" onClick={applyForLoan} disabled={!otpVerified}>
+                Apply for Loan
+              </Button>
+              <div className="button-container">
+                <Button className="button back" onClick={handleBack}>Back</Button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
     </div>
   );
 }

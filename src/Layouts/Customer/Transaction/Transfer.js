@@ -10,7 +10,6 @@ const Transfer = () => {
             <div className="sidebar-and-details">
                 <DefaultSidebar />
                <TabsCustomAnimation/>
-               <TransferTab/>
             </div>
         </div>
     );

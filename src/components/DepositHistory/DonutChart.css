@@ -27,4 +27,49 @@
   .chart-text {
     text-align: center;
   }
+  @media screen and (max-width: 768px) {
+    .donut-chart-container {
+      width: 80% !important;
+    }
+    
+    .donut-chart {
+      width: 120px !important;
+      height: 120px !important;
+    }
+    
+    .donut-chart::after {
+      width: 80px;
+      height: 80px;
+      top: 20px;
+      left: 20px;
+    }
+  }
   
+  /* Media Query for Screens less than or equal to 500px */
+  @media screen and (max-width: 500px) {
+    .donut-chart-container {
+      width: 100%;
+      flex-direction: column; /* Stack chart and text vertically */
+    }
+    
+    .donut-chart {
+      width: 100px;
+      height: 100px;
+    }
+    
+    .donut-chart::after {
+      width: 60px;
+      height: 60px;
+      top: 15px;
+      left: 15px;
+    }
+    
+    .ChartAndInfo{
+      width: 200px;
+      font-size: small;
+      margin-left: -70px;
+    }
+    .chart-text {
+      margin-top: 10px; /* Add spacing between chart and text */
+    }
+  }

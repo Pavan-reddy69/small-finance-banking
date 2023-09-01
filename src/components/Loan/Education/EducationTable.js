@@ -9,28 +9,29 @@ import {
   Box
 } from "@mui/material";
 import api from "../../../Api/api";
+import './EducationTable.css'
 
 const EducationHistoryTable = ({ tableRefresh, refreshTable }) => {
   const [educationHistory, setEducationHistory] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const storedUserData = JSON.parse(localStorage.getItem("userDetails"));
+  const storedUserData = JSON.parse(sessionStorage.getItem("userDetails"));
 
   useEffect(() => {
-    fetcheducationHistory(); 
+    fetcheducationHistory();
   }, [tableRefresh]);
-  
-    const fetcheducationHistory = async () => {
-      try {
-        const response = await fetch(api + "loan/getByType?accNo=" + storedUserData.accNo +"&type=EDUCATION_LOAN");
-        const data = await response.json();
-        setEducationHistory(data);
-      } catch (error) {
-        console.error("Error fetching education history:", error);
-      }
-    };
 
-  
+  const fetcheducationHistory = async () => {
+    try {
+      const response = await fetch(api + "loan/getByType?accNo=" + storedUserData.accNo + "&type=EDUCATION_LOAN");
+      const data = await response.json();
+      setEducationHistory(data);
+    } catch (error) {
+      console.error("Error fetching education history:", error);
+    }
+  };
+
+
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -47,36 +48,41 @@ const EducationHistoryTable = ({ tableRefresh, refreshTable }) => {
   );
 
   return (
-    <Box textAlign="center"> 
-      <Table>
+    <Box textAlign="center">
+      <Table className="custom-font-size-table">
         <TableHead>
           <TableRow>
-            <TableCell>ID</TableCell>
-            <TableCell>Applied Date</TableCell> 
-            <TableCell>Amount</TableCell>
-            <TableCell>Activity Status</TableCell>
-            <TableCell>Interest</TableCell>
-            <TableCell>End Date</TableCell>
-            <TableCell>Monthly Interest</TableCell>
-            <TableCell>Status</TableCell>
+            <TableCell className="custom-font-size-cell">ID</TableCell>
+            <TableCell className="custom-font-size-cell">Applied Date</TableCell>
+            <TableCell className="custom-font-size-cell">Amount</TableCell>
+            <TableCell className="custom-font-size-cell">Activity Status</TableCell>
+            <TableCell className="custom-font-size-cell">Interest</TableCell>
+            <TableCell className="custom-font-size-cell">End Date</TableCell>
+            <TableCell className="custom-font-size-cell">Monthly Interest</TableCell>
+            <TableCell className="custom-font-size-cell">Status</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {displayededucationHistory.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={8} style={{textAlign:'center'}}>No Education Loan Applied</TableCell>
+              <TableCell colSpan={8} style={{ textAlign: 'center' }}>No Education Loan Applied</TableCell>
             </TableRow>
           ) : (
             displayededucationHistory.map((education) => (
-              <TableRow key={education.loanId}>
-                <TableCell>{education.loanId}</TableCell>
-                <TableCell>{education.appliedDate}</TableCell>
-                <TableCell>{education.loanedAmount}</TableCell>
-                <TableCell>{education.isActive ? "Active" : "Inactive"}</TableCell>
-                <TableCell>{education.interest}%</TableCell>
-                <TableCell>{education.loanEndDate}</TableCell>
-                <TableCell>{education.monthlyInterestAmount}</TableCell>
-                <TableCell>{education.status}</TableCell>
+              <TableRow key={education.loanId} >
+                <TableCell className="custom-font-size-cell">{education.loanId}</TableCell>
+                <TableCell className="custom-font-size-cell">{education.appliedDate}</TableCell>
+                <TableCell className="custom-font-size-cell">{education.loanedAmount}</TableCell>
+                <TableCell className="custom-font-size-cell">{education.isActive ? "Active" : "Inactive"}</TableCell>
+                <TableCell className="custom-font-size-cell">{education.interest}%</TableCell>
+                <TableCell className="custom-font-size-cell">{education.loanEndDate}</TableCell>
+                <TableCell className="custom-font-size-cell">{education.monthlyInterestAmount}</TableCell>
+                <TableCell className="custom-font-size-cell"><span
+                  className={`status-cell ${education.status === "APPROVED" ? "APPROVED" : "REJECTED"
+                    }`}
+                >
+                  {education.status}
+                </span></TableCell>
               </TableRow>
             ))
           )}

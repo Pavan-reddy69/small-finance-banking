@@ -1,3 +1,3 @@
-const api = "https://tender-chicken-eat.loca.lt/";
+const api = "https://deep-things-send.loca.lt/";
 
 export default api;

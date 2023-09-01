@@ -19,7 +19,7 @@ const AnimatedComponent = () => {
         />
         
       </div>
-      <h1 className="text-below-image">Live More, Bank Less</h1>
+      <h1 className="text-below-image">Worry Less, Earn More.</h1>
     </div>
   );
 };

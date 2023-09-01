@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import api from "../../Api/api";
+import Swal from 'sweetalert2';
+import { Alert } from '@mui/material';
+
 
 export default function TransferTab() {
   const [amount, setAmount] = useState("");
@@ -8,7 +11,8 @@ export default function TransferTab() {
   const [otp, setOtp] = useState("");
   const [otpGenerated, setOtpGenerated] = useState(false);
   const [error, setError] = useState(null);
-
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [successMsg, setSuccessMsg] = useState(null);
   const storedUserData = JSON.parse(sessionStorage.getItem("userDetails")) || {};
   const accountNumber = storedUserData.accNo || sessionStorage.getItem("accountNumber");
 
@@ -45,15 +49,15 @@ export default function TransferTab() {
 
       if (otpResponse.ok) {
         setOtpGenerated(true);
-        alert("OTP generated successfully!");
+        setSuccessMsg("OTP generated successfully!");
       } else {
         setError("Error generating OTP");
-        alert("Failed to generate OTP. Please try again.");
+        setErrorMsg("Failed to generate OTP. Please try again.");
       }
     } catch (error) {
       console.error("OTP generation error:", error);
       setError("Error generating OTP");
-      alert("An error occurred while generating OTP. Please try again.");
+      setErrorMsg("An error occurred while generating OTP. Please try again.");
     }
   };
 
@@ -119,20 +123,46 @@ export default function TransferTab() {
         setOtp("");
         setOtpGenerated(false);
 
-        alert("Transfer successful!");
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'Amount Transfer Successful',
+        });
       } else {
         setError("Error processing transfer");
-        alert("Transfer failed. Please try again.");
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Transfer Request failed. Please try again.',
+        });
       }
     } catch (error) {
       console.error("Transfer error:", error);
       setError("Error processing transfer");
-      alert("An error occurred while processing transfer. Please try again.");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'An error occurred while processing transfer. Please try again.',
+      });
     }
   };
 
   return (
     <div>
+        {errorMsg && (
+        <div className='otperror' style={{marginTop:"-10px",paddingBottom:"10px"}}>
+          <Alert severity="error" onClose={() => setErrorMsg(null)}>
+            {errorMsg}
+          </Alert>
+        </div>
+      )}
+      {successMsg && (
+        <div className='otpsuccess'>
+          <Alert severity="success" onClose={() => setSuccessMsg(null)}>
+            {successMsg}
+          </Alert>
+        </div>
+      )}
       <h2>Transfer</h2>
       <div className="card">
         <div className="card-header">
@@ -140,52 +170,57 @@ export default function TransferTab() {
         </div>
         <div className="card-body">
           <p>Available Balance: {balance !== null ? balance : 0}</p>
-          <div className="form-group">
-            <label htmlFor="recipientAccount">Recipient's Account Number:</label>
+          <div className="form-grou">
+            <label htmlFor="recipientAccount" style={{paddingRight:'10px',paddingBottom:'10px'}}>Recipient's Account Number:</label>
             <input
               type="text"
               id="recipientAccount"
               value={recipientAccount}
-              pattern="[0-9]{17}"
+              pattern="[0-9]{16}"
               onInput={(e) => {
                 e.target.value = e.target.value.replace(/[^0-9]/g, '');
-                if (e.target.value.length > 17) {
-                  e.target.value = e.target.value.slice(0, 17);
+                if (e.target.value.length > 16) {
+                  e.target.value = e.target.value.slice(0, 16);
+                  
                 }
               }}
               onChange={(e) => setRecipientAccount(e.target.value)}
               placeholder="Enter recipient's account number"
+              className="deposit-input"
             />
           </div>
-          <div className="form-group">
-            <label htmlFor="amount">Amount to Transfer:</label>
+          <div className="form-grou">
+            <label htmlFor="amount" style={{paddingRight:'10px',paddingBottom:'10px'}}>Amount to Transfer:</label>
             <input
               type="number"
               id="amount"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               placeholder="Enter amount"
+              className="deposit-input"
             />
           </div>
-          <div className="form-group">
+          <div className="form-grou">
             <button className="btn btn-primary" onClick={handleGenerateOtp}>
               Generate OTP
             </button>
           </div>
           {otpGenerated && (
-            <div className="form-group">
-              <label htmlFor="otp">Enter OTP:</label>
+            <div className="form-grou">
+              <label htmlFor="otp" style={{paddingRight:'10px',paddingBottom:'10px'}}>Enter OTP:</label>
               <input
                 type="text"
                 id="otp"
                 value={otp}
                 onChange={(e) => setOtp(e.target.value)}
                 placeholder="Enter OTP"
+                className="deposit-input"
+                style={{paddingRight:'10px',marginTop:'10px'}}
               />
             </div>
           )}
           {otpGenerated && (
-            <div className="form-group">
+            <div className="form-grou">
               <button className="btn btn-primary" onClick={handleTransfer}>
                 Transfer
               </button>

@@ -1,87 +1,118 @@
+/* Base styles for larger screens */
 .sign-container {
-    margin-top: 20px !important;
-    max-width: 920px !important;
-    margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    align-items: stretch; /* Stretch content to full width */
-  }
-  
-  .loan-details{
-    display: flex;
-    flex-direction: column;
-    width: 50%;   
+  margin-top: 20px !important;
+  max-width: 920px !important;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.loan-details {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+
+.loan-details .textfield {
+  padding: 20px;
+}
+
+.loan-details h5 {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  padding: 20px;
+}
+
+.sign-contain {
+  margin-top: 20px !important;
+  max-width: 920px !important;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.form-label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.form-label svg {
+  margin-right: 10px;
+}
+
+.form-control {
+  width: 100%;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.back {
+  background-color: #007bff;
+  color: white;
+}
+
+h2 {
+  text-align: center;
+}
+
+.next {
+  background-color: #007bff;
+  color: white;
+}
+
+/* Media Query for Tablets */
+@media screen and (max-width: 768px) {
+  .loan-details {
+      width: 100%;
   }
 
+  .loan-details h5 {
+      width: 100%;
+  }
+}
+
+/* Media Query for Mobile Devices */
+@media screen and (max-width: 480px) {
+  .sign-container,
+  .sign-contain {
+      max-width: 100% !important;
+      padding: 10px;
+      
+  }
+
+  .loan-details {
+      width: 100%;
+      font-size: small !important;  
+  }
 
   .loan-details .textfield {
-  
-   
-    padding: 20px;
-     
+      padding: 10px;
   }
 
-  .loan-details h5{
-    display: flex;
-    flex-direction: column;
-    width: 50%;   
-    padding: 20px;
+  .loan-details h5 {
+      width: 100%;
+      padding: 10px;
   }
-  .sign-contain {
-    margin-top: 20px !important;
-    max-width: 920px !important;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    align-items: stretch; /* Stretch content to full width */
-  }
-  
-  .form-label {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  
-  .form-label svg {
-    margin-right: 10px;
-  }
-  
-  .form-control {
-    width: 100%;
-  }
-  
-  .button-container {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-  }
-  
-  .button {
-    padding: 8px 16px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  
-  .back {
-    background-color: #007bff; /* Blue color */
-    color: white;
-  }
-  
-h2{
-    text-align: center;
 }
-  .next {
-    background-color: #007bff; /* Blue color */
-    color: white;
-  }
-  
-  

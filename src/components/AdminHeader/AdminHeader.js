@@ -1,82 +1,56 @@
-import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import React from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   UsersIcon,
   BuildingLibraryIcon,
   ArrowLeftOnRectangleIcon
 } from "@heroicons/react/24/solid";
-import "./AdminHeader.css";
-import logoImage from '../../assests/logo.png';
+import "../../components/SideNavbar/Sidebar.css";
+import logoImage from "../../assests/logo.png";
 
 export function AdminHeader() {
-  const [isOpen, setIsOpen] = useState(false);
-  const location = useLocation(); // Get the current location
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  const updateSidebarState = () => {
-    if (window.innerWidth <= 800) {
-      setIsOpen(false);
-    } else {
-      setIsOpen(true);
+  const handleLogout = async () => {
+    try {
+      await new Promise((resolve) => {
+        sessionStorage.removeItem("userDetails");
+        resolve();
+      });
+      navigate("/login");
+      window.location.reload();
+    } catch (error) {
+      console.error("An error occurred while logging out:", error);
     }
-  };
-
-  useEffect(() => {
-    updateSidebarState();
-    window.addEventListener("resize", updateSidebarState);
-    return () => {
-      window.removeEventListener("resize", updateSidebarState);
-    };
-  }, []);
-
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const closeSidebar = () => {
-    if (window.innerWidth <= 800) {
-      setIsOpen(false);
-    }
-  };
-
-  const handleLogout = () => {
-    sessionStorage.removeItem("userDetails");
   };
 
   return (
-    <div className={`sidebar ${isOpen ? "open" : ""}`}>
-      {window.innerWidth <= 800 && (
-        <div className="hamburger" onClick={toggleSidebar}>
-          <div className={`bar ${isOpen ? "open" : ""}`}></div>
-          <div className={`bar ${isOpen ? "open" : ""}`}></div>
-          <div className={`bar ${isOpen ? "open" : ""}`}></div>
-        </div>
-      )}
-      <img className="logo" decoding="async" src={logoImage} alt="Logo" />
-
-      <div className="sidebar-content">
+    <div className="updated-sidebar">
+      <img className="logo-header" decoding="async" src={logoImage} alt="Logo" />
+      <div className="updated-sidebar-content">
         <Link
           to="/admin-home"
-          className={`sidebar-link ${location.pathname === "/admin-home" ? "selected" : ""}`}
-          onClick={closeSidebar}
+          className={`sidebar-link ${
+            location.pathname === "/admin-home" ? "selected" : ""
+          }`}
         >
           <UsersIcon className="sidebar-icon" />
           Users
         </Link>
         <Link
           to="/loans"
-          className={`sidebar-link ${location.pathname === "/loans" ? "selected" : ""}`}
-          onClick={closeSidebar}
+          className={`sidebar-link ${
+            location.pathname === "/loans" ? "selected" : ""
+          }`}
         >
           <BuildingLibraryIcon className="sidebar-icon" />
           Loan
-        </Link>      
+        </Link>
         <Link
           to="/login"
-          className="logout"
-          onClick={() => {
-            closeSidebar();
-            handleLogout();
-          }}
+          className="sidebar-link"
+          onClick={() => handleLogout()}
         >
           <ArrowLeftOnRectangleIcon className="sidebar-icon" />
           Logout

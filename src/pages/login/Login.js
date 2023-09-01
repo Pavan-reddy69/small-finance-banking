@@ -10,6 +10,7 @@ import {
   MDBInput,
   MDBCardImage
 } from 'mdb-react-ui-kit';
+import { Alert } from '@mui/material';
 import './Login.css';
 import img2 from '../../assests/logo-removebg-preview (1).png';
 import api from '../../Api/api';
@@ -18,16 +19,14 @@ function Login() {
   const [isManagerLogin, setIsManagerLogin] = useState(false);
   const [emailOrAccount, setEmailOrAccount] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
 
   const handleLogin = async () => {
-    console.log('Logging in with:', emailOrAccount);
-
     try {
-      console.log('Email or Account:', emailOrAccount);
-      console.log('Password:', password);
 
       const loginData = {
-        accountNumber: emailOrAccount, // Treat email as accountNumber
+        accountNumber: emailOrAccount,
         password: password,
       };
 
@@ -40,29 +39,45 @@ function Login() {
       });
 
       if (response.ok) {
+       
         const data = await response.json();
         sessionStorage.setItem('userDetails', JSON.stringify(data));
-        console.log(data);
-        if (data.roleName === 'CUSTOMER') {
-          window.location.href = '/customer-home';
-        } else if (data.roleName === 'MANAGER') {
-          window.location.href = '/admin-home';
-        }
+        setSuccessMessage("Login successful. Redirecting...");
+        setTimeout(() => {
+          setSuccessMessage(null);
+          if (data.roleName === 'CUSTOMER') {
+            window.location.href = '/customer-home';
+          } else if (data.roleName === 'MANAGER') {
+            window.location.href = '/admin-home';
+          }
+        }, 2000);
       } else {
-        console.error('Authentication failed');
+        setErrorMessage("An error occurred. Please try again.");
       }
     } catch (error) {
-      console.error('Error during login:', error);
+      setErrorMessage("An error occurred. Please try again.");
     }
   };
 
-
-
   return (
     <MDBContainer fluid className='login p-4'>
+      {errorMessage && (
+        <div className='Alert'>
+          <Alert severity="error" onClose={() => setErrorMessage(null)}>
+            Enter the correct credentials
+          </Alert>
+        </div>
+      )}
+      {successMessage && (
+        <div className='SuccessAlert'>
+          <Alert severity="success" onClose={() => setSuccessMessage(null)}>
+            {successMessage}
+          </Alert>
+        </div>
+      )}
       <MDBRow>
         <MDBCol md='8' className='text-center text-md-start d-flex flex-column justify-content-center'>
-          <h1 className="besttext my-5 display-3 fw-bold ls-tight px-3">
+          <h1 className="besttext my-100 display-4 fw-bold ls-tight px-12">
             The best Interest Rate <br />
             <span className="text-primary">for your Savings Account</span>
           </h1>
@@ -126,8 +141,9 @@ function Login() {
                     </span>
                   )}
                 </p>
-
               </div>
+
+
             </MDBCardBody>
           </MDBCard>
         </MDBCol>

@@ -1,0 +1,82 @@
+.loan-details {
+    font-family: "Open Sans", sans-serif;
+    margin-left: 10px;
+    background-color: #ffffff;
+    width: 100%;
+}
+
+.card-container-loan {
+    display: flex;
+    flex-direction: row;
+    max-width: 95%;
+    padding: 10px;
+    gap: 20px;
+}
+
+.card-loan {
+    background-color: rgba(201, 195, 195, 0.648);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    border: 1px solid rgba(212, 209, 209, 0.758);
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    flex: 1;
+    min-width: calc(50% - 10px);
+}
+
+.card-container-docs{
+    display: flex;
+    flex-direction: row;
+    max-width: 95%;
+    padding: 10px;
+    gap: 20px;
+}
+
+.pdf-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.pdf-container iframe {
+    max-width: 100%;
+    height: auto;
+}
+
+.approval-buttons-loan {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    gap: 200px;
+}
+
+.approve-button-loan
+ {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    width:250px;
+}
+.reject-button-loan{
+    background-color: rgba(255, 0, 0, 0.696);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    width:250px;
+}
+
+.approve-button-loan:hover
+ {
+    background-color: #0056b3;
+}
+.reject-button-loan:hover{
+    background-color: rgba(167, 12, 12, 0.696)
+}

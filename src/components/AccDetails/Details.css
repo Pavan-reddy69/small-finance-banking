@@ -69,9 +69,51 @@ h2 {
   margin-top: 0;
 }
 
-/* Responsive Styles */
-@media (max-width: 768px) {
-  .card1 {
-    width: 100%; /* Cards take full width on smaller screens */
+@media (max-width: 1024px) {
+  .details-container {
+    padding: 30px;
   }
+}
+
+@media (max-width: 768px) {
+  .details-container {
+    padding: 10px;
+    margin-top: 10px;
+
+  }
+
+  .card1 {
+    margin-top: 10px;
+    width: 100%;
+  }
+
+  .column {
+    flex-direction: column;
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+  @media (max-width: 500px) {
+    .details-container {
+      padding: 10px;
+      font-size: small;
+    }
+  
+    .card1 {
+      width: 100%;
+      font-size: small;
+    }
+  
+    .column {
+      flex-direction: column;
+      margin-left: 0;
+      margin-right: 0;
+    }
+    
+
+.transaction-table th, .transaction-table td {
+      width: 70% !important;
+      margin-top: 20px;
+      font-size: 10px !important;
+    }
 }

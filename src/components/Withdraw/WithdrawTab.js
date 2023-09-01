@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import api from "../../Api/api";
+import Swal from 'sweetalert2';
 
 export default function WithdrawTab() {
   const [amount, setAmount] = useState("");
   const [balance, setBalance] = useState(null);
   const [error, setError] = useState(null); 
-  const storedUserData = JSON.parse(sessionStorage.getItem("userDetails")) || {}; // Initialize with an empty object
+  const storedUserData = JSON.parse(sessionStorage.getItem("userDetails")) || {}; 
   const accountNumber = storedUserData.accNo || sessionStorage.getItem("accountNumber");
 
   useEffect(() => {
@@ -55,31 +56,40 @@ export default function WithdrawTab() {
       });
   
       if (response.ok) {
-        const responseData = await response.json();
-        console.log("Withdrawal response:", responseData);
-  
-       
+        const responseData = await response.json();    
         const newBalance = balance - amount;
         setBalance(newBalance);
         storedUserData.balance = newBalance;
         sessionStorage.setItem("userDetails", JSON.stringify(storedUserData));
   
-        setAmount(""); // Clear the amount input field
-        alert("Withdrawal successful!"); // Show a success alert
+        setAmount(""); 
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: 'Money Withdrawal Successful',
+        });
       } else {
         setError("Error processing withdrawal");
-        alert("Withdrawal failed. Please try again."); // Show an error alert
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Money Withdrawal failed. Please try again.',
+        });
       }
     } catch (error) {
       console.error("Withdrawal error:", error);
       setError("Error processing withdrawal");
-      alert("An error occurred while processing withdrawal. Please try again."); // Show an error alert
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'An error occurred while processing withdrawal. Please try again',
+      });
     }
   };
   
 
   return (
-    <div>
+  <div className="withdraw-container">
       <h2>Withdraw</h2>
       <div className="card">
         <div className="card-header">
@@ -87,14 +97,15 @@ export default function WithdrawTab() {
         </div>
         <div className="card-body">
           <p>Available Balance: {balance !== null ? balance : 0}</p>
-          <div className="form-group">
-            <label htmlFor="amount">Amount to Withdraw:</label>
+          <div className="form-body">
+            <label htmlFor="amount" style={{paddingRight:'10px',paddingBottom:'10px'}}>Amount to Withdraw:</label>
             <input
               type="number"
               id="amount"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               placeholder="Enter amount"
+              className="deposit-input"
             />
           </div>
           {error && <p className="text-danger">{error}</p>}

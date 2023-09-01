@@ -72,8 +72,8 @@ const DepositHistoryTable = () => {
             displayedDepositHistory.map((deposit) => (
               <TableRow
                 key={deposit.fdId}
-                onClick={() => handleRowClick(deposit.fdId || deposit.rid)} // Handle row click
-                style={{ cursor: "pointer" }} // Add cursor style to indicate clickable
+                onClick={() => handleRowClick(deposit.fdId || deposit.rid)} 
+                style={{ cursor: "pointer" }} 
               >
                 <TableCell>{deposit.fdId || deposit.rid}</TableCell>
                 <TableCell>{deposit.amount ? deposit.amount : deposit.monthlyPaidAmount}</TableCell>

@@ -1,11 +1,25 @@
+
 .Home {
-    display:flex;
-    height: 100vh;
-    flex-direction: column;
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+}
+
+.sidebar-and-details {
+  display: flex;
+  flex: 1;
+}
+
+/* Media Query for Tablets and Smaller Screens */
+@media screen and (max-width: 768px) {
+  .Home {
+      flex-direction: column-reverse; /* Reverse the order of flex items for smaller screens */
   }
-  
+
   .sidebar-and-details {
-    display: flex;
-    flex: 1;  
+      flex-direction: column; 
+      flex: 1;
   }
+}
+
   

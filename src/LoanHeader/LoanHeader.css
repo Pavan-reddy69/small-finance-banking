@@ -1,52 +1,72 @@
-
+/* Default styles for tab container */
 .tab-container {
-  
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.tabs-header {
+  padding-top: 20px;
+  display: flex;
+  background-color: #FDFDFD;
+  height: 70px;
+  color: black;
+}
+
+.tab {
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  margin: 2px;
+  padding: 20px;
+  border: 2px solid rgba(52, 51, 51, 0.815);
+  flex-grow: 1;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.tab:hover {
+  background-color: #ffffff;
+  transition: all ease-in-out 450ms;
+  color: #000000;
+}
+
+.tab.active {
+  background-color: #0847a5e7;
+  transition: background-color 0.3s, transform 0.3s;
+  transform: translateX(0);
+  color: #fff;
+}
+
+.slide-active {
+  transform: translateX(calc(100% + 20px));
+}
+
+.tab-content {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+  /* Adjust the layout for smaller screens */
   .tabs-header {
-    padding-top: 20px;
-    display: flex;
-    background-color: #FDFDFD;
-    height: 70px;
-    color: black;
-  }
-  
-  .tab {
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    margin: 2px;
-    padding: 20px;
-    border: 2px solid rgba(52, 51, 51, 0.815);
-    flex-grow: 1;
-    padding: 10px;
-    text-align: center;
-    
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  .tab:hover {
-    background-color: #ffffff; 
-    transition: all ease-in-out 450ms;
-    color: #000000  ;
-  }
-  
-  .tab.active {
-    background-color: #0847a5e7; 
-    transition: background-color 0.3s, transform 0.3s; 
-    transform: translateX(0); 
-    color: #fff;
-  }
-  
-  .slide-active {
-    transform: translateX(calc(100% + 20px)); 
-  }
-  .tab-content {
+    margin-top: 5px;
+    flex-direction: row;
+    align-items: center;
+    height: auto;
     width: 100%;
-    box-sizing: border-box;
-    padding: 20px;
   }
-  
+
+  .tab {
+    margin: 2px;
+    padding: 15px;
+    width: 100%; /* Reduce padding for smaller screens */
+  }
+
+  .tab-content {
+    padding: 15px; /* Reduce padding for smaller screens */
+  }
+}

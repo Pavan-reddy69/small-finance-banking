@@ -38,9 +38,10 @@
   }
   
   .testimonial5 .testi5 .customer-thumb img {
-    width: 120px; 
-    height: 90px;
-    margin-bottom: 10px; /* Adjust margin */
+    width: 110px; 
+    height: 110px;
+    margin-top: 10px;
+   /* Adjust margin */
   }
   
   .testimonial5 .testi5 .owl-item.center .customer-thumb {

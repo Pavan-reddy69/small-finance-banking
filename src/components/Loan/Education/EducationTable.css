@@ -1,0 +1,31 @@
+/* Default styles */
+.custom-font-size-cell {
+  font-size: 13px;
+}
+
+.status-cell {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 5px;
+}
+
+.APPROVED {
+  background-color: rgb(6, 158, 6);
+  color: white;
+}
+
+.REJECTED {
+  background-color: rgb(235, 25, 25);
+  color: white;
+}
+
+/* Media Query for Smaller Screens */
+@media screen and (max-width: 768px) {
+  .custom-font-size-cell {
+      font-size: 12px; /* Adjust font size for smaller screens */
+  }
+
+  .status-cell {
+      padding: 2px 4px; /* Adjust padding for smaller screens */
+  }
+}

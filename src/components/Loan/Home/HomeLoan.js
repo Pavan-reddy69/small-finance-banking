@@ -25,7 +25,7 @@ function HomeLoanComponent() {
   const refreshTabl = () => {
     setTablRefresh(true);
   }
- 
+
   const generateOTP = async () => {
     setError(null);
 
@@ -169,7 +169,7 @@ function HomeLoanComponent() {
               <TextField
                 className='textfield'
                 type="number"
-                label="Tenure (months)"
+                label="Tenure (Year)"
                 value={tenure}
                 onChange={e => setTenure(e.target.value)}
               />
@@ -180,17 +180,19 @@ function HomeLoanComponent() {
           )}
 
           {activeStep === 1 && (
-            <div>
+            <div className='loan-documents'>
               <Typography variant="h5">Upload Documents</Typography>
               <input
                 type="file"
                 accept=".pdf"
                 onChange={e => setSalarySlip(e.target.files[0])}
+                style={{ marginBottom: '20px' }}
               />
               <input
                 type="file"
                 accept=".pdf"
                 onChange={e => setHouseDocumentsFile(e.target.files[0])}
+                style={{ marginBottom: '20px' }}
               />
               {otpSent && (
                 <div>
@@ -199,6 +201,7 @@ function HomeLoanComponent() {
                     label="Enter OTP"
                     value={otp}
                     onChange={e => setOtp(e.target.value)}
+                    style={{ marginBottom: '20px', width: '50%', paddingRight: '20px' }}
                   />
                   <Button className="button next" onClick={verifyOTP}>Verify OTP</Button>
                 </div>
@@ -216,8 +219,10 @@ function HomeLoanComponent() {
           {activeStep === 2 && (
             <div>
               <Typography variant="h5">Review and Submit</Typography>
-              {/* Display user input summary */}
-              {/* ... */}
+              <p>Loan Amount: {loanAmount}</p>
+              <p>Tenure: {tenure} Years</p>
+              {salarySlip && <p>Salary Slip: {salarySlip.name}</p>}
+              {houseDocumentsFile && <p>House Documents: {houseDocumentsFile.name}</p>}
               <Button className="button next" onClick={applyForLoan} disabled={!otpVerified}>
                 Apply for Loan
               </Button>

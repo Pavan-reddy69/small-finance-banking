@@ -31,6 +31,7 @@ const TransactionTable = () => {
         <TableRow>
           <TableCell>ID</TableCell>
           <TableCell>Amount</TableCell>
+          <TableCell>Details</TableCell>
           <TableCell>Type</TableCell>
           <TableCell>From Account</TableCell>
           <TableCell>To Account</TableCell>
@@ -40,7 +41,7 @@ const TransactionTable = () => {
       <TableBody>
         {top10Transactions.length === 0 ? (
           <TableRow>
-            <TableCell colSpan={5} style={{textAlign:'center'}}>No transactions available</TableCell>
+            <TableCell colSpan={8} style={{textAlign:'center'}}>No transactions available</TableCell>
           </TableRow>
         ) : (
           top10Transactions.map((transaction) => (
@@ -48,6 +49,7 @@ const TransactionTable = () => {
               <TableCell>{transaction.transactionID}</TableCell>
               <TableCell>{transaction.amount}</TableCell>
               <TableCell>{transaction.transactionType}</TableCell>
+              <TableCell>{transaction.whichTransaction}</TableCell>
               <TableCell>{transaction.fromAccountNumber}</TableCell>
               <TableCell>{transaction.toAccountNumber}</TableCell>
               <TableCell>{transaction.timestamp}</TableCell>

@@ -1,6 +1,6 @@
 // DefaultSidebar.js
-import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import React from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   HomeIcon,
   CreditCardIcon,
@@ -10,101 +10,78 @@ import {
   ArrowLeftOnRectangleIcon
 } from "@heroicons/react/24/solid";
 import "./Sidebar.css";
-import logoImage from '../../assests/logo.png';
+import logoImage from "../../assests/logo.png";
 
 export function DefaultSidebar() {
-  const [isOpen, setIsOpen] = useState(false);
-  const location = useLocation(); // Get the current location
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  const updateSidebarState = () => {
-    if (window.innerWidth <= 800) {
-      setIsOpen(false);
-    } else {
-      setIsOpen(true);
+  const handleLogout = async () => {
+    try {
+      await new Promise((resolve) => {
+        sessionStorage.removeItem("userDetails");
+        resolve();
+      });
+      navigate("/login");
+      window.location.reload();
+    } catch (error) {
+      console.error("An error occurred while logging out:", error);
     }
-  };
-
-  useEffect(() => {
-    updateSidebarState();
-    window.addEventListener("resize", updateSidebarState);
-    return () => {
-      window.removeEventListener("resize", updateSidebarState);
-    };
-  }, []);
-
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const closeSidebar = () => {
-    if (window.innerWidth <= 800) {
-      setIsOpen(false);
-    }
-  };
-
-  const handleLogout = () => {
-    sessionStorage.removeItem("userDetails");
   };
 
   return (
-    <div className={`sidebar ${isOpen ? "open" : ""}`}>
-      {window.innerWidth <= 800 && (
-        <div className="hamburger" onClick={toggleSidebar}>
-          <div className={`bar ${isOpen ? "open" : ""}`}></div>
-          <div className={`bar ${isOpen ? "open" : ""}`}></div>
-          <div className={`bar ${isOpen ? "open" : ""}`}></div>
-        </div>
-      )}
-      <img className="logo" decoding="async" src={logoImage} alt="Logo" />
-
-      <div className="sidebar-content">
+    <div className="updated-sidebar">
+      <img className="logo-header" decoding="async" src={logoImage} alt="Logo" />
+      <div className="updated-sidebar-content">
         <Link
           to="/customer-home"
-          className={`sidebar-link ${location.pathname === "/customer-home" ? "selected" : ""}`}
-          onClick={closeSidebar}
+          className={`sidebar-link ${
+            location.pathname === "/customer-home" ? "selected" : ""
+          }`}
         >
           <HomeIcon className="sidebar-icon" />
           Home
         </Link>
         <Link
           to="/transactions"
-          className={`sidebar-link ${location.pathname === "/transactions" ? "selected" : ""}`}
-          onClick={closeSidebar}
+          className={`sidebar-link ${
+            location.pathname === "/transactions" ? "selected" : ""
+          }`}
         >
           <CreditCardIcon className="sidebar-icon" />
           Transaction
         </Link>
         <Link
           to="/loan"
-          className={`sidebar-link ${location.pathname === "/loan" ? "selected" : ""}`}
-          onClick={closeSidebar}
+          className={`sidebar-link ${
+            location.pathname === "/loan" ? "selected" : ""
+          }`}
         >
           <BuildingLibraryIcon className="sidebar-icon" />
           Loan
         </Link>
         <Link
           to="/deposit"
-          className={`sidebar-link ${location.pathname === "/deposit" ? "selected" : ""}`}
-          onClick={closeSidebar}
+          className={`sidebar-link ${
+            location.pathname === "/deposit" ? "selected" : ""
+          }`}
         >
           <CurrencyRupeeIcon className="sidebar-icon" />
           Deposit
         </Link>
         <Link
           to="/profile"
-          className={`sidebar-link ${location.pathname === "/profile" ? "selected" : ""}`}
-          onClick={closeSidebar}
+          className={`sidebar-link ${
+            location.pathname === "/profile" ? "selected" : ""
+          }`}
         >
           <Cog6ToothIcon className="sidebar-icon" />
           Settings
         </Link>
         <Link
           to="/login"
-          className="logout"
-          onClick={() => {
-            closeSidebar();
-            handleLogout();
-          }}
+          className="sidebar-link"
+          onClick={() => handleLogout()}
         >
           <ArrowLeftOnRectangleIcon className="sidebar-icon" />
           Logout

@@ -15,7 +15,7 @@ const HomeHistoryTable = ({ tablRefresh, refreshTable }) => {
   const [homeHistory, setHomeHistory] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const storedUserData = JSON.parse(localStorage.getItem("userDetails"));
+  const storedUserData = JSON.parse(sessionStorage.getItem("userDetails"));
 
 
   useEffect(() => {

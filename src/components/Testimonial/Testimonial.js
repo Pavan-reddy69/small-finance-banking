@@ -35,7 +35,7 @@ const TestimonialCarousel = () => {
         },
         {
             content: "Switching to APA Small Finance Bank's services was a game-changer for my business. Their website's seamless experience and exceptional customer service are unmatched.",
-            image: "https://i.pinimg.com/564x/6d/27/64/6d2764104d9725290153dea9d0cf7bb8.jpg",
+            image: "https://media.gettyimages.com/id/1135381120/photo/portrait-of-a-young-woman-outdoors-smiling.jpg?s=612x612&w=gi&k=20&c=NHEzgNcz0NKt1jd5cHHoquA9efPrUjtB7yYD38BYrD0=",
             name: "Emily Johnson",
             role: "Small Business Owner",
         },
@@ -48,7 +48,7 @@ const TestimonialCarousel = () => {
         },
         {
             content: "APA Small Finance Bank's website is my financial companion. Its mobile app ensures I have full control over my money, offering a secure and convenient banking experience.",
-            image: "https://cloudfront.penguin.co.in/wp-content/uploads/2018/06/Indian-Instincts_Header-scaled.jpg",
+            image: "https://media.istockphoto.com/id/1304581885/photo/portrait-of-young-woman-smiling.jpg?s=612x612&w=0&k=20&c=szq9mHVYt-iWL6TebJ6BfxSX8e9WR1HqF-PbR5oma4Y=",
             name: "Sarah Davis",
             role: "Freelancer",
         },
@@ -60,7 +60,7 @@ const TestimonialCarousel = () => {
         },
         {
             content: "I found my dream home with the help of APA Small Finance Bank's mortgage services. Their website guided me through the process, making homeownership a reality.",
-            image: "https://www.kamat.com/kalranga/women/fair_sex/2807.jpg",
+            image: "https://media.istockphoto.com/id/1216152397/photo/portrait-of-female-owner-of-gift-store-standing-in-front-of-shelves-with-cosmetics-and-candles.jpg?s=612x612&w=0&k=20&c=23L_GhirOBiExv00QPw555TiTsSrZqhFii2F89CHXVE=",
             name: "Jessica Brown",
             role: "Homeowner",
         },
@@ -72,7 +72,7 @@ const TestimonialCarousel = () => {
         },
         {
             content: "As a student, I rely on APA Small Finance Bank's student banking services. Their website's convenience and low fees cater perfectly to my financial needs.",
-            image: "https://i.pinimg.com/564x/6d/27/64/6d2764104d9725290153dea9d0cf7bb8.jpg",
+            image: "https://texantreeexperts.com/wp-content/uploads/2018/01/testimonial-image-female.jpg",
             name: "Amanda Turner",
             role: "Student",
         },

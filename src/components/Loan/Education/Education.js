@@ -110,11 +110,11 @@ function EducationLoanComponent() {
           setOtpSent(false);
           setOtpVerified(false)
           console.log("Loan application successful:", data);
-          // Handle success scenario here, if needed
+      
         })
         .catch(error => {
           console.error("Error applying for loan:", error);
-          // Handle error scenario here, if needed
+         
         });
     } else {
       console.log("Please verify OTP before applying for the loan.");
@@ -165,7 +165,7 @@ function EducationLoanComponent() {
               <TextField
                 className='textfield'
                 type="number"
-                label="Tenure (months)"
+                label="Tenure (Years)"
                 value={tenure}
                 onChange={e => setTenure(e.target.value)}
               />
@@ -176,19 +176,21 @@ function EducationLoanComponent() {
           )}
 
           {activeStep === 1 && (
-            <div>
+            <div className='loan-documents'>
               <Typography variant="h5">Upload Documents</Typography>
               <input
                 label="College Admission File"
                 type="file"
                 accept=".pdf"
                 onChange={e => setCollegeAdmissionFile(e.target.files[0])}
+                style={{ marginBottom: '20px' }}
               />
               <input
                 label="House Documents"
                 type="file"
                 accept=".pdf"
                 onChange={e => setHouseDocumentsFile(e.target.files[0])}
+                style={{ marginBottom: '20px' }}
               />
               {otpSent && (
                 <div>
@@ -197,6 +199,7 @@ function EducationLoanComponent() {
                     label="Enter OTP"
                     value={otp}
                     onChange={e => setOtp(e.target.value)}
+                    style={{ marginBottom: '20px' ,width:'50%',paddingRight:'20px'}}
                   />
                   <Button className="button next" onClick={verifyOTP}>Verify OTP</Button>
                 </div>
@@ -214,8 +217,10 @@ function EducationLoanComponent() {
           {activeStep === 2 && (
             <div>
               <Typography variant="h5">Review and Submit</Typography>
-              {/* Display user input summary */}
-              {/* ... */}
+              <p>Loan Amount: {loanAmount}</p>
+              <p>Tenure: {tenure} Years</p>
+              {collegeAdmissionFile && <p>Salary Slip: {collegeAdmissionFile.name}</p>}
+              {houseDocumentsFile && <p>House Documents: {houseDocumentsFile.name}</p>}
               <Button className="button next" onClick={applyForLoan} disabled={!otpVerified}>
                 Apply for Loan
               </Button>

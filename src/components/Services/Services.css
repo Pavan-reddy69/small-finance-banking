@@ -36,5 +36,9 @@
     .service-card {
       width: calc(50% - 20px); /* 2 cards in a row for smaller screens */
     }
+  } @media (max-width: 500px) {
+    .service-card {
+      width: calc(100% - 2px); /* 2 cards in a row for smaller screens */
+    }
   }
   
