@@ -3,9 +3,12 @@ import { Stepper, Step, StepLabel, Button, Typography, TextField } from '@mui/ma
 import PersonalHistoryTable from './MortgageTable';
 import './MortgageLoan.css';
 import api from '../../../Api/api';
-const apiEndpoint = "https://example.com/api";
+import Swal from 'sweetalert2';
+import { Alert } from '@mui/material';
 
 function PersonalLoanComponent() {
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [successMsg, setSuccessMsg] = useState(null);
   const [loanAmount, setLoanAmount] = useState(0);
   const [tenure, setTenure] = useState(0);
   const [interestDetails, setInterestDetails] = useState(null);
@@ -17,7 +20,7 @@ function PersonalLoanComponent() {
   const [houseDocumentsFile, setHouseDocumentsFile] = useState(null);
   const storedUserData = JSON.parse(sessionStorage.getItem("userDetails")) || {};
   const accountNumber = storedUserData.accNo || sessionStorage.getItem("accountNumber");
-  const [error, setError] = useState(null); // For displaying error messages
+  const [error, setError] = useState(null); 
   const steps = ['Loan Details', 'Upload Documents', 'Review and Submit'];
 
   const refreshTable = () => {
@@ -40,15 +43,15 @@ function PersonalLoanComponent() {
 
       if (otpResponse.ok) {
         setOtpSent(true);
-        alert("OTP generated successfully!");
+        setSuccessMsg("OTP generated successfully!");
       } else {
         setError("Error generating OTP");
-        alert("Failed to generate OTP. Please try again.");
+        setErrorMsg("Failed to generate OTP. Please try again.");
       }
     } catch (error) {
       console.error("OTP generation error:", error);
       setError("Error generating OTP");
-      alert("An error occurred while generating OTP. Please try again.");
+      setErrorMsg("An error occurred while generating OTP. Please try again.");
     }
   };
 
@@ -73,11 +76,19 @@ function PersonalLoanComponent() {
       }
 
       setOtpVerified(true);
-      alert("OTP verified successfully!");
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: "OTP verified successfully!",
+      });
     } catch (error) {
       console.error("OTP verification error:", error);
       setError("Error verifying OTP");
-      alert("An error occurred while verifying OTP. Please try again.");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'An error occurred while verifying OTP. Please try again.',
+      });
     }
   };
 
@@ -100,14 +111,22 @@ function PersonalLoanComponent() {
       })
         .then(response => {
           if (!response.ok) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'An error occurred while applying Loan. Please try again.',
+            });
             throw new Error('Network response was not ok');
           }
           return response.json();
         })
         .then(data => {
-          alert("Personal Loan application successful!");
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: "Education Loan application successful!",
+          });
 
-          // Reset stepper step to 0
           setActiveStep(0);
           setLoanAmount('');
           setTenure('');
@@ -119,10 +138,19 @@ function PersonalLoanComponent() {
         })
         .catch(error => {
           console.error("Error applying for loan:", error);
-          // Handle error scenario here, if needed
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error applying for loan',
+          });
         });
     } else {
       console.log("Please verify OTP before applying for the loan.");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Please verify OTP before applying for the loan.',
+      });
     }
   };
   const [activeStep, setActiveStep] = useState(0);
@@ -140,6 +168,20 @@ function PersonalLoanComponent() {
 
   return (
     <div>
+      {errorMsg && (
+        <div className='otperror' style={{marginTop:"-10px",paddingBottom:"10px"}}>
+          <Alert severity="error" onClose={() => setErrorMsg(null)}>
+            {errorMsg}
+          </Alert>
+        </div>
+      )}
+      {successMsg && (
+        <div className='otpsuccess'>
+          <Alert severity="success" onClose={() => setSuccessMsg(null)}>
+            {successMsg}
+          </Alert>
+        </div>
+      )}
       <PersonalHistoryTable tableRefresh={tableRefresh} refreshTable={refreshTable} />
       <div className="sign-container">
 

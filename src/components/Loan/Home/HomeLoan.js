@@ -3,9 +3,12 @@ import { Stepper, Step, StepLabel, Button, Typography, TextField } from '@mui/ma
 import HomeHistoryTable from './HomeTable';
 import './HomeLoan.css';
 import api from '../../../Api/api';
-const apiEndpoint = "https://example.com/api";
+import Swal from 'sweetalert2';
+import { Alert } from '@mui/material';
 
 function HomeLoanComponent() {
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [successMsg, setSuccessMsg] = useState(null);
   const [loanAmount, setLoanAmount] = useState(0);
   const [tenure, setTenure] = useState(0);
   const [interestDetails, setInterestDetails] = useState(null);
@@ -42,15 +45,15 @@ function HomeLoanComponent() {
 
       if (otpResponse.ok) {
         setOtpSent(true);
-        alert("OTP generated successfully!");
+        setSuccessMsg("OTP generated successfully!");
       } else {
         setError("Error generating OTP");
-        alert("Failed to generate OTP. Please try again.");
+        setErrorMsg("Failed to generate OTP. Please try again.");
       }
     } catch (error) {
       console.error("OTP generation error:", error);
       setError("Error generating OTP");
-      alert("An error occurred while generating OTP. Please try again.");
+      setErrorMsg("An error occurred while generating OTP. Please try again.");
     }
   };
 
@@ -75,11 +78,19 @@ function HomeLoanComponent() {
       }
 
       setOtpVerified(true);
-      alert("OTP verified successfully!");
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: "OTP verified successfully!",
+      });
     } catch (error) {
       console.error("OTP verification error:", error);
       setError("Error verifying OTP");
-      alert("An error occurred while verifying OTP. Please try again.");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'An error occurred while verifying OTP. Please try again.',
+      });
     }
   };
 
@@ -102,14 +113,21 @@ function HomeLoanComponent() {
       })
         .then(response => {
           if (!response.ok) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'An error occurred while applying Loan. Please try again.',
+            });
             throw new Error('Network response was not ok');
           }
           return response.json();
         })
         .then(data => {
-          alert("Home Loan application successful!");
-
-
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: "Education Loan application successful!",
+          });
           setActiveStep(0);
           setLoanAmount('');
           setTenure('');
@@ -120,10 +138,19 @@ function HomeLoanComponent() {
         })
         .catch(error => {
           console.error("Error applying for loan:", error);
-
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error applying for loan',
+          });
         });
     } else {
       console.log("Please verify OTP before applying for the loan.");
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Please verify OTP before applying for the loan.',
+      });
     }
   };
 
@@ -142,6 +169,20 @@ function HomeLoanComponent() {
 
   return (
     <div>
+       {errorMsg && (
+        <div className='otperror' style={{marginTop:"-10px",paddingBottom:"10px"}}>
+          <Alert severity="error" onClose={() => setErrorMsg(null)}>
+            {errorMsg}
+          </Alert>
+        </div>
+      )}
+      {successMsg && (
+        <div className='otpsuccess'>
+          <Alert severity="success" onClose={() => setSuccessMsg(null)}>
+            {successMsg}
+          </Alert>
+        </div>
+      )}
       <HomeHistoryTable tableRefresh={tablRefresh} refreshTable={refreshTabl} />
       <div className="sign-container">
 
@@ -223,11 +264,12 @@ function HomeLoanComponent() {
               <p>Tenure: {tenure} Years</p>
               {salarySlip && <p>Salary Slip: {salarySlip.name}</p>}
               {houseDocumentsFile && <p>House Documents: {houseDocumentsFile.name}</p>}
-              <Button className="button next" onClick={applyForLoan} disabled={!otpVerified}>
-                Apply for Loan
-              </Button>
+              
               <div className="button-container">
                 <Button className="button back" onClick={handleBack}>Back</Button>
+                <Button className="button next" onClick={applyForLoan} disabled={!otpVerified}>
+                Apply for Loan
+              </Button>
               </div>
             </div>
           )}
