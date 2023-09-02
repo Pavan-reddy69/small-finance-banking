@@ -4,7 +4,7 @@ import api from '../../../Api/api';
 
 function Profile() {
   const [userDetails, setUserDetails] = useState({});
-
+  const storedUserDetails = sessionStorage.getItem('userDetails');
 
   useEffect(() => {
   
@@ -28,6 +28,8 @@ const maskedPanNumber = userDetails.panCardNumber
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${storedUserDetails.accessToken}`,
+        'ngrok-skip-browser-warning': '69420',  
       },
       body: JSON.stringify({}), 
     })

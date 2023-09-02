@@ -28,13 +28,21 @@ export default function DepositTab() {
 
   const handlePaymentSuccess = async (paymentId) => {
     try {
+      const accessToken = storedUserData.accessToken;
+
       const apiResponse = await axios.post(
-        api + "transaction/transfer?accNo=" + storedUserData.accNo,
+        api + "transaction/transfer?accNo=" + storedUserData.accNo,  
         {
           to: storedUserData.accNo,
           amount: amount,
           type: "DEPOSIT",
           paymentId: paymentId,
+        },
+        {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'ngrok-skip-browser-warning': '69420',
+          }
         }
       );
       Swal.fire({

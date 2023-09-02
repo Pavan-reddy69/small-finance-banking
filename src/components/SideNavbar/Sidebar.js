@@ -1,5 +1,4 @@
-
-import React from "react";
+import React, { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   HomeIcon,
@@ -12,7 +11,7 @@ import {
 import "./Sidebar.css";
 import logoImage from "../../assests/logo.png";
 
-export function DefaultSidebar() {
+export function DefaultSidebar({ isOpen, toggleSidebar }) {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -30,14 +29,20 @@ export function DefaultSidebar() {
   };
 
   return (
-    <div className="updated-sidebar">
-      <img className="logo-header" decoding="async" src={logoImage} alt="Logo" />
+    <div className={`updated-sidebar ${isOpen ? "open" : ""}`}>
+      <img
+        className="logo-header"
+        decoding="async"
+        src={logoImage}
+        alt="Logo"
+      />
       <div className="updated-sidebar-content">
         <Link
           to="/customer-home"
           className={`sidebar-link ${
             location.pathname === "/customer-home" ? "selected" : ""
           }`}
+          onClick={() => toggleSidebar(false)}
         >
           <HomeIcon className="sidebar-icon" />
           Home
@@ -47,6 +52,7 @@ export function DefaultSidebar() {
           className={`sidebar-link ${
             location.pathname === "/transactions" ? "selected" : ""
           }`}
+          onClick={() => toggleSidebar(false)}
         >
           <CreditCardIcon className="sidebar-icon" />
           Transaction
@@ -56,6 +62,7 @@ export function DefaultSidebar() {
           className={`sidebar-link ${
             location.pathname === "/loan" ? "selected" : ""
           }`}
+          onClick={() => toggleSidebar(false)}
         >
           <BuildingLibraryIcon className="sidebar-icon" />
           Loan
@@ -65,6 +72,7 @@ export function DefaultSidebar() {
           className={`sidebar-link ${
             location.pathname === "/deposit" ? "selected" : ""
           }`}
+          onClick={() => toggleSidebar(false)}
         >
           <CurrencyRupeeIcon className="sidebar-icon" />
           Deposit
@@ -74,6 +82,7 @@ export function DefaultSidebar() {
           className={`sidebar-link ${
             location.pathname === "/profile" ? "selected" : ""
           }`}
+          onClick={() => toggleSidebar(false)}
         >
           <Cog6ToothIcon className="sidebar-icon" />
           Settings
@@ -81,7 +90,10 @@ export function DefaultSidebar() {
         <Link
           to="/login"
           className="sidebar-link"
-          onClick={() => handleLogout()}
+          onClick={() => {
+            toggleSidebar(false);
+            handleLogout();
+          }}
         >
           <ArrowLeftOnRectangleIcon className="sidebar-icon" />
           Logout

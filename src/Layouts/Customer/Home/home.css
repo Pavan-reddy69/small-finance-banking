@@ -1,25 +1,125 @@
-
 .Home {
   display: flex;
   height: 100vh;
   flex-direction: column;
+  position: relative; /* Add position relative for overlay */
+}
+
+.sidebar-open .navbar {
+  transform: translateY(0); /* Show the full navbar links when the sidebar is open */
+}
+
+.sidebar-open .sidebar-and-details {
+  transform: translateY(10px); /* Push the details component down when the sidebar is open */
 }
 
 .sidebar-and-details {
   display: flex;
   flex: 1;
+  position: relative;
+  transition: transform 0.3s;
+  z-index: 1;
 }
 
-/* Media Query for Tablets and Smaller Screens */
-@media screen and (max-width: 768px) {
-  .Home {
-      flex-direction: column-reverse; /* Reverse the order of flex items for smaller screens */
+.hamburger {
+  cursor: pointer;
+  font-size: 24px;
+  padding: 20px;
+}
+
+.navbar {
+  transform: translateY(-100%); /* Initially hide the full navbar links above the viewport */
+  transition: transform 0.3s;
+}
+
+/* Media Query for Small Screens */
+@media screen and (max-width: 1000px) {
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #FEFEFE;
+    position: relative;
+    height: 70px;
   }
 
+  .hamburger {
+    cursor: pointer;
+    font-size: 24px;
+  }
+
+  .navbar.open {
+    transform: translateY(0); /* Show the full navbar links when the sidebar is open for small screens */
+  }
+
+  /* Update the sidebar-and-details style to remove space when the header is hidden */
   .sidebar-and-details {
-      flex-direction: column; 
-      flex: 1;
+    transform: translateY(0); /* Remove any extra space when the header is hidden */
   }
 }
 
+/* CSS for Icons with a Different Class Name */
+/* CSS for Icons with Labels Next to Icons */
+.custom-icons {
+  display: flex;
+  justify-content: center;
+  align-items: center; /* Center icons and labels vertically */
+  text-decoration: none;
+  color: #333; /* Icon color */
+  font-size: 16px; /* Icon font size */
+  width: auto; /* Allow the width to adjust based on content */
+  height: 20px; /* Add spacing around icons and labels */
+}
+
+.custom-icons:hover {
+  background-color: #f0f0f0; /* Hover background color */
+  color: #555;
+
+}
+
+/* Add spacing between icon and label */
+.custom-icons svg {
+  margin-right: 8px;
+}
+
+/* Style the links next to icons */
+.navbar-links {
+  list-style: none;
+  padding: 0;
   
+  font-weight: 400; /* Add spacing between icon and label */
+ 
+}
+
+.navbar-links li {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+  margin-left: 20px;
+  
+  font-weight: 400; /* Add spacing between icon and label */
+}
+
+.navbar-links a {
+  text-decoration: none;
+  color: #333;
+  font-size: 15px;
+  margin-left: 10px;
+}
+
+.logo-header {
+  width: 160px;
+  height: 50px;
+}
+/* Media Query for Larger Screens */
+@media screen and (min-width: 700px) {
+  .hamburger {
+    display: none; /* Hide the hamburger menu for larger screens */
+  }
+
+  .header {
+    display: none;
+  }
+
+
+}

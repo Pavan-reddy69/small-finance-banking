@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './TermDeposit.css';
 import api from '../../Api/api';
+import Swal from 'sweetalert2';
 
 const TermDeposit = () => {
   const [amount, setAmount] = useState('');
@@ -14,7 +15,16 @@ const TermDeposit = () => {
   useEffect(() => {
     const fetchBalance = async () => {
       try {
-        const response = await fetch(api + 'Account/getBalance?accNo=' + storedUserData.accNo);
+        const headers = new Headers({
+          'Authorization': `Bearer ${storedUserData.accessToken}`,
+          'ngrok-skip-browser-warning': '69420',
+        });
+
+        const response = await fetch(api + 'Account/getBalance?accNo=' + storedUserData.accNo, {
+          method: 'GET',
+          headers: headers,
+        });
+
         const data = await response.json();
         setBalance(data);
 
@@ -22,6 +32,11 @@ const TermDeposit = () => {
         sessionStorage.setItem('userDetails', JSON.stringify(storedUserData));
       } catch (error) {
         console.error('Error fetching balance:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Error fetching balance',
+        });
       }
     };
 
@@ -54,26 +69,43 @@ const TermDeposit = () => {
           tenures: tenure,
           amount: amount
         };
-        console.log('Creating new FD:', depositData);   
+        console.log('Creating new FD:', depositData);
         const response = await fetch(api + 'fd/createFixedDeposit', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${storedUserData.accessToken}`,
+            'ngrok-skip-browser-warning': '69420',
           },
           body: JSON.stringify(depositData),
         });
 
         if (response.ok) {
-            alert("FD Creation successful!");
-            setBalance(balance - parseFloat(amount));
-            setAmount("");
-            setTenure('0');
-          
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: "FD Creation successful!",
+          });
+
+          setBalance(balance - parseFloat(amount));
+          setAmount("");
+          setTenure('0');
+
         } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error creating term deposit',
+          });
           setError('Error creating term deposit');
         }
       } catch (error) {
         console.error('Deposit creation error:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Error creating term deposit',
+        });
         setError('Error creating term deposit');
       }
     }

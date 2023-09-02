@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../Api/api';
 import { DefaultSidebar } from '../SideNavbar/Sidebar';
 import './DepositDetailsPage.css'; // Import your custom CSS file here
+import Swal from 'sweetalert2';
 
 const DepositDetailsPage = ({ deposit }) => {
   const { id } = useParams();
@@ -13,16 +14,26 @@ const DepositDetailsPage = ({ deposit }) => {
   useEffect(() => {
     const fetchFDDetails = async () => {
       try {
-        const response = await fetch(api + 'fd/getbyId?id='+id); 
+        const headers = new Headers({
+          'Authorization': `Bearer ${storedUserData.accessToken}`,
+          'ngrok-skip-browser-warning': '69420',
+        });
+  
+        const response = await fetch(api + 'fd/getbyId?id=' + id, {
+          method: 'GET',
+          headers: headers,
+        });
+  
         const data = await response.json();
         setFDDetails(data);
       } catch (error) {
         console.error('Error fetching FD details:', error);
       }
     };
-
+  
     fetchFDDetails();
   }, [id]);
+  
 
   const handleBreakDeposit = async () => {
     try {
@@ -30,20 +41,33 @@ const DepositDetailsPage = ({ deposit }) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${storedUserData.accessToken}`,
+          'ngrok-skip-browser-warning': '69420',
         },
       });
   
       if (response.ok) {
-        // Handle success
         console.log('Deposit broken successfully');
-        alert('Deposit successfully broken');
-        
-        // Navigate back to the /deposits page
+        Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: "Fixed Deposit successfully broken",
+        });
         navigate('/deposit');
       } else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to break deposit. Please try again.',
+        });
         console.error('Failed to break deposit');
       }
     } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Failed to break deposit. Please try again.',
+      });
       console.error('Error while breaking deposit:', error);
     }
   };

@@ -42,19 +42,13 @@ const SignUpPage = () => {
         try {
             const formSubmissionResponse = await axios.post(api+'Account/create', formData);
             console.log('API response:', formSubmissionResponse.data);
-            // First, upload the images
             const formDataForImages = new FormData();
             formDataForImages.append('file1', formData.aadharImage);
             formDataForImages.append('file2', formData.panImage);
             formDataForImages.append('file3', formData.userPhoto);
             formDataForImages.append('userName',formData.email)
             const imageUploadResponse = await axios.put(api+'user/uploadImage', formDataForImages);
-            console.log('Image upload response:', imageUploadResponse.data);
-    
-           
-      
-    
-          
+            console.log('Image upload response:', imageUploadResponse.data);          
             handleNext();
         } catch (error) {
             console.error('Error signing up:', error);

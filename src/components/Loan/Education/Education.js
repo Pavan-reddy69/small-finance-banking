@@ -34,6 +34,8 @@ function EducationLoanComponent() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          'Authorization': `Bearer ${storedUserData.accessToken}`,
+          'ngrok-skip-browser-warning': '69420',          
         },
         body: JSON.stringify({
           accountNumber: accountNumber,
@@ -62,6 +64,8 @@ function EducationLoanComponent() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          'Authorization': `Bearer ${storedUserData.accessToken}`,
+          'ngrok-skip-browser-warning': '69420',
         },
         body: JSON.stringify({
           accountNumber: accountNumber,
@@ -104,7 +108,9 @@ function EducationLoanComponent() {
       fetch(api + 'loan/apply', {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          'Authorization': `Bearer ${storedUserData.accessToken}`,
+          'ngrok-skip-browser-warning': '69420',
         },
         body: JSON.stringify(loanData)
       })
@@ -150,6 +156,11 @@ function EducationLoanComponent() {
   
     fetch(api + `loan/uploadSuppliments`, {
       method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': `Bearer ${storedUserData.accessToken}`,
+        'ngrok-skip-browser-warning': '69420',
+      },
       body: formData,
     })
       .then(response => {

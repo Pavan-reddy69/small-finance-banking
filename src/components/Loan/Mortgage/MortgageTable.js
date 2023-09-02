@@ -21,15 +21,23 @@ const PersonalHistoryTable = ({ tableRefresh, refreshTable }) => {
   }, [tableRefresh]);
 
   
-    const fetchPersonalHistory = async () => {
-      try {
-        const response = await fetch(api + "loan/getByType?accNo=" + storedUserData.accNo +"&type=PERSONAL_LOAN");;
-        const data = await response.json();
-        setPersonalHistory(data);
-      } catch (error) {
-        console.error("Error fetching Personal history:", error);
-      }
+  const fetchPersonalHistory = async () => {
+    const headers = {
+      'Authorization': `Bearer ${storedUserData.accessToken}`,
+      'ngrok-skip-browser-warning': '69420',
     };
+  
+    try {
+      const response = await fetch(api + "loan/getByType?accNo=" + storedUserData.accNo + "&type=PERSONAL_LOAN", {
+        headers: headers,
+      });
+      const data = await response.json();
+      setPersonalHistory(data);
+    } catch (error) {
+      console.error("Error fetching Personal history:", error);
+    }
+  };
+  
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);

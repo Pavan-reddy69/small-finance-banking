@@ -23,14 +23,22 @@ const HomeHistoryTable = ({ tablRefresh, refreshTable }) => {
   }, [tablRefresh]);
 
   const fetchHomeHistory = async () => {
+    const headers = {
+      'Authorization': `Bearer ${storedUserData.accessToken}`,
+      'ngrok-skip-browser-warning': '69420',
+    };
+  
     try {
-      const response = await fetch(api + "loan/getByType?accNo=" + storedUserData.accNo + "&type=HOME_LOAN");
+      const response = await fetch(api + "loan/getByType?accNo=" + storedUserData.accNo + "&type=HOME_LOAN", {
+        headers: headers,
+      });
       const data = await response.json();
       setHomeHistory(data);
     } catch (error) {
       console.error("Error fetching Home history:", error);
     }
   };
+  
 
 
 

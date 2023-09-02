@@ -49,15 +49,26 @@ const DetailsComponent = () => {
 
   const fetchUpdatedFields = async () => {
     try {
-
-      const response = await fetch(api+'Account/homePage?accNo='+storedUserData.accNo);
-      const updatedFields = await response.json();
-      return updatedFields;
+      const accessToken = storedUserData.accessToken; // Assuming the access token is stored in storedUserData
+  
+      const response = await fetch(api + 'Account/homePage?accNo=' + storedUserData.accNo, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'ngrok-skip-browser-warning': '69420',
+        }
+      });
+  
+      if (response.ok) {
+        const updatedFields = await response.json();
+        return updatedFields;
+      } else {
+        throw new Error("Failed to fetch updated fields");
+      }
     } catch (error) {
       throw new Error("Failed to fetch updated fields");
     }
   };
-
+  
   return (
     <div className="details-container">
       <div className="card-row">

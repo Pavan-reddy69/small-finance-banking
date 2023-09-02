@@ -35,6 +35,8 @@ function PersonalLoanComponent() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          'Authorization': `Bearer ${storedUserData.accessToken}`,
+          'ngrok-skip-browser-warning': '69420',
         },
         body: JSON.stringify({
           accountNumber: accountNumber,
@@ -63,6 +65,8 @@ function PersonalLoanComponent() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          'Authorization': `Bearer ${storedUserData.accessToken}`,
+          'ngrok-skip-browser-warning': '69420',
         },
         body: JSON.stringify({
           accountNumber: accountNumber,
@@ -105,7 +109,9 @@ function PersonalLoanComponent() {
       fetch(api + 'loan/apply', {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          'Authorization': `Bearer ${storedUserData.accessToken}`,
+          'ngrok-skip-browser-warning': '69420',
         },
         body: JSON.stringify(loanData)
       })

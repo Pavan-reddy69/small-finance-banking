@@ -14,7 +14,7 @@ function Passbook() {
   const [endDateFilter, setEndDateFilter] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const storedUserData = JSON.parse(sessionStorage.getItem("userDetails"));
-
+ 
   useEffect(() => {
     fetchFilteredTransactions();
   }, [currentPage, transactionTypeFilter, startDateFilter, endDateFilter]);
@@ -26,8 +26,15 @@ function Passbook() {
       date2: endDateFilter,
       accNo: storedUserData.accNo,
     });
-
-    axios.get(api + "transaction/allTransactions?" + queryParams)
+  
+    const headers = {
+      headers: {
+        'Authorization': `Bearer ${storedUserData.accessToken}`,
+        'ngrok-skip-browser-warning': '69420',
+      },
+    };
+  
+    axios.get(api + "transaction/allTransactions?" + queryParams, headers)
       .then(response => {
         setTransactions(response.data);
       })
@@ -35,6 +42,7 @@ function Passbook() {
         console.error('Error fetching transactions:', error);
       });
   };
+  
 
   useEffect(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;

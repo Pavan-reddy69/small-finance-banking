@@ -8,21 +8,31 @@ const TransactionTable = () => {
   const storedUserData = JSON.parse(sessionStorage.getItem("userDetails"));
   
   useEffect(() => {
-   
     const fakeApiCall = async () => {
       try {
-        
-        const response = await fetch(api+"transaction/allTransactions?accNo="+storedUserData.accNo);
-        const data = await response.json();
-        setTransactions(data);
+        const accessToken = storedUserData.accessToken; 
+  
+        const response = await fetch(api + "transaction/allTransactions?accNo=" + storedUserData.accNo, {
+          headers: {
+            'Authorization': `Bearer ${accessToken}`,
+            'ngrok-skip-browser-warning': '69420',
+          }
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          setTransactions(data);
+        } else {
+          console.error("Error fetching transactions:", response.statusText);
+        }
       } catch (error) {
         console.error("Error fetching transactions:", error);
       }
     };
-    
-
-    fakeApiCall(); 
+  
+    fakeApiCall();
   }, []);
+  
 
   const top10Transactions = transactions.slice(0, 10); 
 

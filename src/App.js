@@ -5,7 +5,7 @@ import Routers from './Layouts/Customer/CustomerLayout/CustomRoutes';
 import Home from '../src/pages/Landing/Home';
 import Adminrouters from './Layouts/Manager/ManagerRouters';
 import SignUpPage from './pages/sign up/Signup';
-
+import Land from './Layouts/Customer/Home/Home';
 function App() {
   const [userRole, setUserRole] = useState(null);
 

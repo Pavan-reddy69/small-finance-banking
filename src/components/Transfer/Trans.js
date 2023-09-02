@@ -15,23 +15,39 @@ export default function TransferTab() {
   const [successMsg, setSuccessMsg] = useState(null);
   const storedUserData = JSON.parse(sessionStorage.getItem("userDetails")) || {};
   const accountNumber = storedUserData.accNo || sessionStorage.getItem("accountNumber");
+  const accessToken = storedUserData.accessToken; 
 
   useEffect(() => {
     const fetchBalance = async () => {
+    
       try {
-        const response = await fetch(api + 'Account/getBalance?accNo=' + storedUserData.accNo);
+        const headers = new Headers({
+          'Authorization': `Bearer ${accessToken}`,
+          'ngrok-skip-browser-warning': '69420',
+        });
+  
+        const response = await fetch(api + 'Account/getBalance?accNo=' + storedUserData.accNo, {
+          method: 'GET',
+          headers: headers,
+        });
+  
+        if (!response.ok) {
+          throw new Error('Failed to fetch balance');
+        }
+  
         const data = await response.json();
         setBalance(data);
-
+  
         storedUserData.balance = data;
         sessionStorage.setItem('userDetails', JSON.stringify(storedUserData));
       } catch (error) {
         console.error('Error fetching balance:', error);
       }
     };
-
+  
     fetchBalance();
   }, []);
+  
 
   const handleGenerateOtp = async () => {
     setError(null);
@@ -41,6 +57,8 @@ export default function TransferTab() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          'Authorization': `Bearer ${accessToken}`,
+          'ngrok-skip-browser-warning': '69420',
         },
         body: JSON.stringify({
           accountNumber: accountNumber,
@@ -89,6 +107,8 @@ export default function TransferTab() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          'Authorization': `Bearer ${accessToken}`,
+          'ngrok-skip-browser-warning': '69420',
         },
         body: JSON.stringify({
           accountNumber: accountNumber,
@@ -105,6 +125,8 @@ export default function TransferTab() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          'Authorization': `Bearer ${accessToken}`,
+          'ngrok-skip-browser-warning': '69420',
         },
         body: JSON.stringify({
           to: recipientAccount,

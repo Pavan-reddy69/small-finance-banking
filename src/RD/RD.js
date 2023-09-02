@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Rd.css';
 import api from '../Api/api';
+import Swal from 'sweetalert2';
 
 const RD = () => {
   const [amount, setAmount] = useState('');
@@ -9,25 +10,36 @@ const RD = () => {
   const [error, setError] = useState('');
   const storedUserData = JSON.parse(sessionStorage.getItem('userDetails')) || {};
   const accountNumber = storedUserData.accNo || sessionStorage.getItem('accountNumber');
-
   useEffect(() => {
+    const headers = {
+      'Authorization': `Bearer ${storedUserData.accessToken}`,
+      'ngrok-skip-browser-warning': '69420',
+    };
+  
     const fetchBalance = async () => {
       try {
-        const response = await fetch(api + 'Account/getBalance?accNo=' + storedUserData.accNo);
+        const response = await fetch(api + 'Account/getBalance?accNo=' + storedUserData.accNo, {
+          headers: headers,
+        });
         const data = await response.json();
         setBalance(data);
-
+  
         // Update local storage with the retrieved balance
         storedUserData.balance = data;
         sessionStorage.setItem('userDetails', JSON.stringify(storedUserData));
       } catch (error) {
         console.error('Error fetching balance:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Error fetching balance',
+        });
       }
     };
-
+  
     fetchBalance();
   }, []);
-
+  
   const handleAmountChange = (event) => {
     setAmount(event.target.value);
   };
@@ -50,25 +62,41 @@ const RD = () => {
           monthTenure: tenure,
           monthlyPaidAmount: amount,
         };
-        console.log('Creating new RD:', depositData); // Log the deposit data
+        console.log('Creating new RD:', depositData);
   
         const response = await fetch(api + 'rd/save', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${storedUserData.accessToken}`,
+            'ngrok-skip-browser-warning': '69420',
           },
           body: JSON.stringify(depositData),
         });
   
         if (response.ok) {
-          alert('RD Creation successful!');
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: "RD Creation successful!",
+          });
           setBalance(balance - parseFloat(amount));
           setAmount('');
           setTenure(6);
         } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error creating Recurring deposit',
+          });
           setError('Error creating Recurring deposit');
         }
       } catch (error) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Error creating Recurring deposit',
+        });
         console.error('Deposit creation error:', error);
         setError('Error creating Recurring deposit');
       }
@@ -81,6 +109,8 @@ const RD = () => {
       <div className="basic-details">
         <h2>Basic Details</h2>
         <p>Account Number: {accountNumber}</p>
+        <p>Earn Upto 11%* Interest Rate annualy on your Recurring Deposit!!</p>
+        <p>P.S. A Recurring Deposit can not be closed before the Tenure selected.</p>
       </div>
       <div className="create-deposit">
         <h2>Create Recurring Deposit</h2>

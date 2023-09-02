@@ -22,15 +22,22 @@ const EducationHistoryTable = ({ tableRefresh, refreshTable }) => {
   }, [tableRefresh]);
 
   const fetcheducationHistory = async () => {
+    const headers = {
+      'Authorization': `Bearer ${storedUserData.accessToken}`,
+      'ngrok-skip-browser-warning': '69420',
+    };
+  
     try {
-      const response = await fetch(api + "loan/getByType?accNo=" + storedUserData.accNo + "&type=EDUCATION_LOAN");
+      const response = await fetch(api + "loan/getByType?accNo=" + storedUserData.accNo + "&type=EDUCATION_LOAN", {
+        headers: headers,
+      });
       const data = await response.json();
       setEducationHistory(data);
     } catch (error) {
       console.error("Error fetching education history:", error);
     }
   };
-
+  
 
 
   const handleChangePage = (event, newPage) => {

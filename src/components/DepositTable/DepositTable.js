@@ -23,16 +23,31 @@ const DepositHistoryTable = () => {
   useEffect(() => {
     const fetchDepositHistory = async () => {
       try {
-        const response = await fetch(api + "deposit/get?accNo=" + storedUserData.accNo);
+        const headers = new Headers({
+          'Authorization': `Bearer ${storedUserData.accessToken}`,
+          'ngrok-skip-browser-warning': '69420',
+        });
+  
+        const response = await fetch(api + 'deposit/get?accNo=' + storedUserData.accNo, {
+          method: 'GET',
+          headers: headers,
+        });
+  
         const data = await response.json();
         setDepositHistory(data);
       } catch (error) {
-        console.error("Error fetching deposit history:", error);
+        console.error('Error fetching deposit history:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Error fetching deposit history',
+        });
       }
     };
-
+  
     fetchDepositHistory();
   }, []);
+  
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);

@@ -11,22 +11,26 @@ function DepositHistory() {
   const [fdDeposits , setFdDeposits] =useState(0);
   const [deposits , setDeposits] =useState(0);
   const storedUserData = JSON.parse(sessionStorage.getItem("userDetails")) || {};
-  const accountNumber = storedUserData.accNo || sessionStorage.getItem("accountNumber");
 
   useEffect(() => {
-   
-    fetch(api+'deposit/getDetails?accNo='+storedUserData.accNo)
+    const headers = {
+      'Authorization': `Bearer ${storedUserData.accessToken}`,
+      'ngrok-skip-browser-warning': '69420',
+    };
+  
+    fetch(api + 'deposit/getDetails?accNo=' + storedUserData.accNo, {
+      headers: headers,
+    })
       .then(response => response.json())
       .then(data => {
         setFdAmount(data.totalFdAmount);
-        setFdDeposits(data.totalNoOfFD); 
+        setFdDeposits(data.totalNoOfFD);
         setDeposits(data.totalNoOfRD);
         setRdAmount(data.totalRdAmount);
       })
       .catch(error => console.error('Error fetching FD amount:', error));
-
-   
   }, []);
+  
 
   const totalDeposits = fdAmount + rdAmount;
   const totalDeposit = deposits+fdDeposits;

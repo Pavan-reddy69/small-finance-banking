@@ -8,24 +8,36 @@ export default function WithdrawTab() {
   const [error, setError] = useState(null); 
   const storedUserData = JSON.parse(sessionStorage.getItem("userDetails")) || {}; 
   const accountNumber = storedUserData.accNo || sessionStorage.getItem("accountNumber");
-
   useEffect(() => {
     const fetchBalance = async () => {
+      const accessToken = storedUserData.accessToken; 
       try {
-        const response = await fetch(api+'Account/getBalance?accNo='+storedUserData.accNo); 
+        const headers = new Headers({
+          'Authorization': `Bearer ${accessToken}`,
+          'ngrok-skip-browser-warning': '69420',
+        });
+  
+        const response = await fetch(api + 'Account/getBalance?accNo=' + storedUserData.accNo, {
+          method: 'GET',
+          headers: headers,
+        });
+  
+        if (!response.ok) {
+          throw new Error('Failed to fetch balance');
+        }
+  
         const data = await response.json();
         setBalance(data);
-
-        // Update local storage with the retrieved balance
         storedUserData.balance = data;
         sessionStorage.setItem("userDetails", JSON.stringify(storedUserData));
       } catch (error) {
-        console.error("Error fetching balance:", error);
+        console.error("Error fetching balance:", error.message);
       }
     };
-
+  
     fetchBalance();
   }, []);
+  
 
   const handleWithdraw = async () => {
     setError(null);
