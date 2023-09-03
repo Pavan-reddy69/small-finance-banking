@@ -33,7 +33,7 @@
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
     "react-icons": "^4.10.1",
-    "react-loader-spinner": "^5.3.4",
+    "react-loader-spinner": "^5.4.5",
     "react-minimal-side-navigation": "^1.9.2",
     "react-native-youtube-iframe": "^2.3.0",
     "react-owl-carousel": "^2.3.3",

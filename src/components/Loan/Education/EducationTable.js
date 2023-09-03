@@ -10,11 +10,13 @@ import {
 } from "@mui/material";
 import api from "../../../Api/api";
 import './EducationTable.css'
+import Loader, { TailSpin } from 'react-loader-spinner'; // Import the Loader component
 
 const EducationHistoryTable = ({ tableRefresh, refreshTable }) => {
   const [educationHistory, setEducationHistory] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [loading, setLoading] = useState(false); // Add a loading state
   const storedUserData = JSON.parse(sessionStorage.getItem("userDetails"));
 
   useEffect(() => {
@@ -22,6 +24,8 @@ const EducationHistoryTable = ({ tableRefresh, refreshTable }) => {
   }, [tableRefresh]);
 
   const fetcheducationHistory = async () => {
+    setLoading(true); // Set loading to true before making the API call
+
     const headers = {
       'Authorization': `Bearer ${storedUserData.accessToken}`,
       'ngrok-skip-browser-warning': '69420',
@@ -35,10 +39,10 @@ const EducationHistoryTable = ({ tableRefresh, refreshTable }) => {
       setEducationHistory(data);
     } catch (error) {
       console.error("Error fetching education history:", error);
+    } finally {
+      setLoading(false); // Set loading to false after the API call is complete
     }
   };
-  
-
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -56,6 +60,16 @@ const EducationHistoryTable = ({ tableRefresh, refreshTable }) => {
 
   return (
     <Box textAlign="center">
+      {loading && ( // Render the Loader component when loading is true
+        <div className='loader-container'>
+        <TailSpin
+          type="TailSpin"
+          color="red"
+          height={100}
+          width={150}
+        />
+      </div>
+      )}
       <Table className="custom-font-size-table">
         <TableHead>
           <TableRow>

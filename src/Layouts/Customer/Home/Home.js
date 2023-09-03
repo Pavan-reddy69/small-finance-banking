@@ -2,14 +2,6 @@ import React, { useState, useEffect } from "react";
 import { DefaultSidebar } from "../../../components/SideNavbar/Sidebar";
 import DetailsComponent from "../../../components/AccDetails/Detail";
 import "./home.css";
-import {
-  HomeIcon,
-  CreditCardIcon,
-  CurrencyRupeeIcon,
-  Cog6ToothIcon,
-  BuildingLibraryIcon,
-  ArrowLeftOnRectangleIcon
-} from "@heroicons/react/24/solid";
 import logoImage from "../../../assests/logo.png";
 
 const Land = () => {
@@ -55,7 +47,6 @@ const Land = () => {
       )}
       {isHamburgerVisible && isSidebarOpen && (
         <div className="navbar">
-          {/* Display navbar links below the header */}
           <ul className={`navbar-links`}>
             {sidebarLinks.map((link, index) => (
               <li key={index}>

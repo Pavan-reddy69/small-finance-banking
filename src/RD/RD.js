@@ -2,20 +2,23 @@ import React, { useState, useEffect } from 'react';
 import './Rd.css';
 import api from '../Api/api';
 import Swal from 'sweetalert2';
+import Loader,{TailSpin} from 'react-loader-spinner'; // Import the Loader component
 
 const RD = () => {
   const [amount, setAmount] = useState('');
-  const [tenure, setTenure] = useState(6); 
+  const [tenure, setTenure] = useState(6);
   const [balance, setBalance] = useState(0);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false); // Add a loading state and set it to false initially
   const storedUserData = JSON.parse(sessionStorage.getItem('userDetails')) || {};
   const accountNumber = storedUserData.accNo || sessionStorage.getItem('accountNumber');
+
   useEffect(() => {
     const headers = {
       'Authorization': `Bearer ${storedUserData.accessToken}`,
       'ngrok-skip-browser-warning': '69420',
     };
-  
+
     const fetchBalance = async () => {
       try {
         const response = await fetch(api + 'Account/getBalance?accNo=' + storedUserData.accNo, {
@@ -23,7 +26,7 @@ const RD = () => {
         });
         const data = await response.json();
         setBalance(data);
-  
+
         // Update local storage with the retrieved balance
         storedUserData.balance = data;
         sessionStorage.setItem('userDetails', JSON.stringify(storedUserData));
@@ -36,17 +39,16 @@ const RD = () => {
         });
       }
     };
-  
+
     fetchBalance();
   }, []);
-  
+
   const handleAmountChange = (event) => {
     setAmount(event.target.value);
   };
 
   const handleTenureChange = (event) => {
     setTenure(parseInt(event.target.value));
-    
   };
 
   const handleDeposit = async () => {
@@ -56,6 +58,7 @@ const RD = () => {
       setError('Tenure should be at least 6 months.');
     } else {
       setError('');
+      setLoading(true); // Set loading to true before making the API call
       try {
         const depositData = {
           accountNumber: accountNumber,
@@ -63,7 +66,7 @@ const RD = () => {
           monthlyPaidAmount: amount,
         };
         console.log('Creating new RD:', depositData);
-  
+
         const response = await fetch(api + 'rd/save', {
           method: 'POST',
           headers: {
@@ -73,7 +76,7 @@ const RD = () => {
           },
           body: JSON.stringify(depositData),
         });
-  
+
         if (response.ok) {
           Swal.fire({
             icon: 'success',
@@ -91,6 +94,7 @@ const RD = () => {
           });
           setError('Error creating Recurring deposit');
         }
+        setLoading(false); // Set loading to false after the API call is complete
       } catch (error) {
         Swal.fire({
           icon: 'error',
@@ -99,10 +103,10 @@ const RD = () => {
         });
         console.error('Deposit creation error:', error);
         setError('Error creating Recurring deposit');
+        setLoading(false); // Set loading to false in case of an error
       }
     }
   };
-  
 
   return (
     <div className="container">
@@ -110,7 +114,7 @@ const RD = () => {
         <h2>Basic Details</h2>
         <p>Account Number: {accountNumber}</p>
         <p>Earn Upto 11%* Interest Rate annualy on your Recurring Deposit!!</p>
-        <p>P.S. A Recurring Deposit can not be closed before the Tenure selected.</p>
+        <p>P.S. A Recurring Deposit cannot be closed before the Tenure selected.</p>
       </div>
       <div className="create-deposit">
         <h2>Create Recurring Deposit</h2>
@@ -122,8 +126,8 @@ const RD = () => {
         <input
           type="number"
           value={tenure}
-          min="6" 
-          max="60" 
+          min="6"
+          max="60"
           onChange={handleTenureChange}
         />
         <br />
@@ -131,6 +135,16 @@ const RD = () => {
         {error && <p className="error-message">{error}</p>}
         <p className="balance">Balance: {balance}</p>
       </div>
+      {loading && ( // Render the Loader component when loading is true
+        <div className='loader-container'>
+          <TailSpin
+            type="TailSpin"
+            color="red"
+            height={100}
+            width={150}
+          />
+        </div>
+      )}
     </div>
   );
 };

@@ -9,17 +9,17 @@ import {
   Box
 } from "@mui/material";
 import api from "../../../Api/api";
-
+import Loader, { TailSpin } from 'react-loader-spinner'; // Import the Loader component
 
 const HomeHistoryTable = ({ tablRefresh, refreshTable }) => {
   const [homeHistory, setHomeHistory] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [loading, setLoading] = useState(false); // Add a loading state
   const storedUserData = JSON.parse(sessionStorage.getItem("userDetails"));
 
-
   useEffect(() => {
-    fetchHomeHistory(); 
+    fetchHomeHistory();
   }, [tablRefresh]);
 
   const fetchHomeHistory = async () => {
@@ -27,8 +27,10 @@ const HomeHistoryTable = ({ tablRefresh, refreshTable }) => {
       'Authorization': `Bearer ${storedUserData.accessToken}`,
       'ngrok-skip-browser-warning': '69420',
     };
-  
+
     try {
+      setLoading(true); // Set loading to true before making the API call
+
       const response = await fetch(api + "loan/getByType?accNo=" + storedUserData.accNo + "&type=HOME_LOAN", {
         headers: headers,
       });
@@ -36,11 +38,10 @@ const HomeHistoryTable = ({ tablRefresh, refreshTable }) => {
       setHomeHistory(data);
     } catch (error) {
       console.error("Error fetching Home history:", error);
+    } finally {
+      setLoading(false); // Set loading to false after the API call is complete
     }
   };
-  
-
-
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -58,6 +59,16 @@ const HomeHistoryTable = ({ tablRefresh, refreshTable }) => {
 
   return (
     <Box textAlign="center">
+      {loading && (
+        <div className='loader-container'>
+          <TailSpin
+            type="TailSpin"
+            color="red"
+            height={100}
+            width={150}
+          />
+        </div>
+      )}
       <Table>
         <TableHead>
           <TableRow>

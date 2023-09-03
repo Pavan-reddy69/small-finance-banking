@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import api from "../../Api/api";
 import Swal from 'sweetalert2';
 import { Alert } from '@mui/material';
-
+import { TailSpin } from 'react-loader-spinner'; // Import the loader component
 
 export default function TransferTab() {
   const [amount, setAmount] = useState("");
@@ -13,46 +13,51 @@ export default function TransferTab() {
   const [error, setError] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [successMsg, setSuccessMsg] = useState(null);
+  const [loading, setLoading] = useState(false); // Add a loading state
   const storedUserData = JSON.parse(sessionStorage.getItem("userDetails")) || {};
   const accountNumber = storedUserData.accNo || sessionStorage.getItem("accountNumber");
-  const accessToken = storedUserData.accessToken; 
+  const accessToken = storedUserData.accessToken;
 
   useEffect(() => {
     const fetchBalance = async () => {
-    
+      setLoading(true); // Set loading to true before making the API call
+
       try {
         const headers = new Headers({
           'Authorization': `Bearer ${accessToken}`,
           'ngrok-skip-browser-warning': '69420',
         });
-  
+
         const response = await fetch(api + 'Account/getBalance?accNo=' + storedUserData.accNo, {
           method: 'GET',
           headers: headers,
         });
-  
+
         if (!response.ok) {
           throw new Error('Failed to fetch balance');
         }
-  
+
         const data = await response.json();
         setBalance(data);
-  
+
         storedUserData.balance = data;
         sessionStorage.setItem('userDetails', JSON.stringify(storedUserData));
       } catch (error) {
         console.error('Error fetching balance:', error);
+      } finally {
+        setLoading(false); // Set loading to false after the API call is complete
       }
     };
-  
+
     fetchBalance();
   }, []);
-  
 
   const handleGenerateOtp = async () => {
     setError(null);
 
     try {
+      setLoading(true); // Set loading to true before making the API call
+
       const otpResponse = await fetch(api + "otp/sendOtp", {
         method: "POST",
         headers: {
@@ -76,6 +81,8 @@ export default function TransferTab() {
       console.error("OTP generation error:", error);
       setError("Error generating OTP");
       setErrorMsg("An error occurred while generating OTP. Please try again.");
+    } finally {
+      setLoading(false); // Set loading to false after the API call is complete
     }
   };
 
@@ -103,6 +110,8 @@ export default function TransferTab() {
     }
 
     try {
+      setLoading(true); // Set loading to true before making the API call
+
       const otpResponse = await fetch(api + "otp/verifyOtp", {
         method: "POST",
         headers: {
@@ -115,7 +124,7 @@ export default function TransferTab() {
           otp: otp,
         }),
       });
-    
+
       if (!otpResponse.ok) {
         setError("Entered OTP is incorrect");
         return;
@@ -145,33 +154,23 @@ export default function TransferTab() {
         setOtp("");
         setOtpGenerated(false);
 
-        Swal.fire({
-          icon: 'success',
-          title: 'Success',
-          text: 'Amount Transfer Successful',
-        });
+        setSuccessMsg("Amount Transfer Successful");
       } else {
         setError("Error processing transfer");
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Transfer Request failed. Please try again.',
-        });
+        setErrorMsg("Transfer Request failed. Please try again.");
       }
     } catch (error) {
       console.error("Transfer error:", error);
       setError("Error processing transfer");
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'An error occurred while processing transfer. Please try again.',
-      });
+      setErrorMsg("An error occurred while processing transfer. Please try again.");
+    } finally {
+      setLoading(false); // Set loading to false after the API call is complete
     }
   };
 
   return (
     <div>
-        {errorMsg && (
+      {errorMsg && (
         <div className='otperror' style={{marginTop:"-10px",paddingBottom:"10px"}}>
           <Alert severity="error" onClose={() => setErrorMsg(null)}>
             {errorMsg}
@@ -183,6 +182,16 @@ export default function TransferTab() {
           <Alert severity="success" onClose={() => setSuccessMsg(null)}>
             {successMsg}
           </Alert>
+        </div>
+      )}
+      {loading && (
+        <div className="loader-container">
+          <TailSpin
+            type="TailSpin"
+            color="red"
+            height={100}
+            width={150}
+          />
         </div>
       )}
       <h2>Transfer</h2>
@@ -203,7 +212,6 @@ export default function TransferTab() {
                 e.target.value = e.target.value.replace(/[^0-9]/g, '');
                 if (e.target.value.length > 16) {
                   e.target.value = e.target.value.slice(0, 16);
-                  
                 }
               }}
               onChange={(e) => setRecipientAccount(e.target.value)}

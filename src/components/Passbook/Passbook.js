@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Passbook.css';
 import axios from 'axios'; 
 import api from '../../Api/api';
+import Loader, { TailSpin } from 'react-loader-spinner'; // Import the loader component
 
 const itemsPerPage = 10;
 const maxVisiblePages = 5;
@@ -13,6 +14,7 @@ function Passbook() {
   const [startDateFilter, setStartDateFilter] = useState('');
   const [endDateFilter, setEndDateFilter] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(false); // Add a loading state
   const storedUserData = JSON.parse(sessionStorage.getItem("userDetails"));
  
   useEffect(() => {
@@ -20,6 +22,8 @@ function Passbook() {
   }, [currentPage, transactionTypeFilter, startDateFilter, endDateFilter]);
 
   const fetchFilteredTransactions = () => {
+    setLoading(true); // Set loading to true before making the API call
+
     const queryParams = new URLSearchParams({
       type: transactionTypeFilter,
       date1: startDateFilter,
@@ -40,9 +44,11 @@ function Passbook() {
       })
       .catch(error => {
         console.error('Error fetching transactions:', error);
+      })
+      .finally(() => {
+        setLoading(false); // Set loading to false after the API call is complete
       });
   };
-  
 
   useEffect(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -84,38 +90,48 @@ function Passbook() {
           value={endDateFilter}
           onChange={e => setEndDateFilter(e.target.value)}
         />
-        {/* <button onClick={fetchFilteredTransactions}>Apply Filters</button> */}
       </div>
-      {filteredTransactions.length === 0 ? (
-        <p className="no-history-message" colSpan={7}>No transfer history available</p>
+      {loading ? ( // Render the loader when loading is true
+        <div className="loader-container">
+          <TailSpin
+            type="TailSpin"
+            color="red"
+            height={100}
+            width={150}
+          />
+        </div>
       ) : (
-      <table className="transaction-table">
-        <thead>
-          <tr className="transaction-header">
-            <th>ID</th>
-            <th>Amount</th>
-            <th>Details</th>
-            <th>Type</th>
-            <th>From Account</th>
-            <th>To Account</th>
-            <th>Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredTransactions.map(transaction => (
-            <tr key={transaction.transactionID} className="transaction-row">
-              <td>{transaction.transactionID}</td>
-              <td>{transaction.amount}</td>
-              <td>{transaction.transactionType}</td>
-              <td>{transaction.whichTransaction}</td>
-              <td>{transaction.fromAccountNumber}</td>
-              <td>{transaction.toAccountNumber}</td>
-              <td>{transaction.timestamp}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-       )}
+        filteredTransactions.length === 0 ? (
+          <p className="no-history-message" colSpan={7}>No transfer history available</p>
+        ) : (
+          <table className="transaction-table">
+            <thead>
+              <tr className="transaction-header">
+                <th>ID</th>
+                <th>Amount</th>
+                <th>Details</th>
+                <th>Type</th>
+                <th>From Account</th>
+                <th>To Account</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredTransactions.map(transaction => (
+                <tr key={transaction.transactionID} className="transaction-row">
+                  <td>{transaction.transactionID}</td>
+                  <td>{transaction.amount}</td>
+                  <td>{transaction.transactionType}</td>
+                  <td>{transaction.whichTransaction}</td>
+                  <td>{transaction.fromAccountNumber}</td>
+                  <td>{transaction.toAccountNumber}</td>
+                  <td>{transaction.timestamp}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )
+      )}
       <div className="pagination-container">
         {visiblePages.map(pageNumber => (
           <button

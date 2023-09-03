@@ -1,33 +1,39 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './LoanDetailsPage.css'; 
+import './LoanDetailsPage.css';
 import api from '../../../../../Api/api';
 import Swal from 'sweetalert2';
-
+import { TailSpin } from 'react-loader-spinner';
 
 const LoanDetailsPage = () => {
     const { loanId } = useParams();
     const [loanAndUserDetails, setLoanAndUserDetails] = useState(null);
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
+    const storedUserData = JSON.parse(sessionStorage.getItem("userDetails"));
+
+    const headers = {
+        'Authorization': `Bearer ${storedUserData.accessToken}`,
+        'ngrok-skip-browser-warning': '69420',
+    };
 
     useEffect(() => {
-        axios.get(api + 'loan/getById?id=' + loanId)
+        axios.get(api + 'loan/getById?id=' + loanId, { headers })
             .then(response => {
                 setLoanAndUserDetails(response.data);
-                console.log(response)
+                console.log(response);
+                setLoading(false);
             })
             .catch(error => {
                 console.error('Error fetching loan and user details:', error);
+                setLoading(false);
             });
     }, [loanId]);
 
-    if (!loanAndUserDetails) {
-        return <p>Loading...</p>;
-    }
-
     const handleApproveLoan = () => {
-        axios.put(api + 'loan/set?id='+loanId+'&status=APPROVE' )
+        setLoading(true);
+        axios.put(api + 'loan/set?id=' + loanId + '&status=APPROVE', {}, { headers })
             .then(response => {
                 if (response.status === 200) {
                     Swal.fire({
@@ -35,8 +41,10 @@ const LoanDetailsPage = () => {
                         title: 'Loan Approved!',
                         text: 'The loan has been approved successfully.',
                     });
+                    setLoading(false);
                     navigate('/loans');
                 } else {
+                    setLoading(false);
                     Swal.fire({
                         icon: 'error',
                         title: 'Approval Failed',
@@ -45,6 +53,7 @@ const LoanDetailsPage = () => {
                 }
             })
             .catch(error => {
+                setLoading(false);
                 Swal.fire({
                     icon: 'error',
                     title: 'Approval Error',
@@ -53,9 +62,9 @@ const LoanDetailsPage = () => {
             });
     };
 
-
     const handleRejectLoan = () => {
-        axios.put(api + 'loan/set?id='+loanId+'&status=REJECT' )
+        setLoading(true);
+        axios.put(api + 'loan/set?id=' + loanId + '&status=REJECT', {}, { headers })
             .then(response => {
                 if (response.status === 200) {
                     Swal.fire({
@@ -65,6 +74,7 @@ const LoanDetailsPage = () => {
                     });
                     navigate('/loans');
                 } else {
+                    setLoading(false);
                     Swal.fire({
                         icon: 'error',
                         title: 'Rejection Failed',
@@ -73,6 +83,7 @@ const LoanDetailsPage = () => {
                 }
             })
             .catch(error => {
+                setLoading(false);
                 Swal.fire({
                     icon: 'error',
                     title: 'Rejection Error',
@@ -80,9 +91,20 @@ const LoanDetailsPage = () => {
                 });
             });
     };
-    
 
 
+    if (loading) {
+        return (
+            <div className='loader-container'>
+               <TailSpin
+                   type="TailSpin"
+                   color="red"
+                   height={100}
+                   width={150}
+               />
+           </div>
+        );
+    }
     return (
         <div className="loan-details">
             <div className="card-container-loan">

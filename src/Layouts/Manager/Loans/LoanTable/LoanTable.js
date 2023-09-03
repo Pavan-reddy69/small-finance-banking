@@ -13,6 +13,7 @@ import './LoanTable.css';
 import api from '../../../../Api/api';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { TailSpin } from 'react-loader-spinner'; // Import the Loader component
 
 const LoanTable = () => {
   const [pendingLoans, setPendingLoans] = useState([]);
@@ -20,27 +21,35 @@ const LoanTable = () => {
   const [rejectedLoans, setRejectedLoans] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  
-  const [currentPagePending, setCurrentPagePending] = useState(0);
-  const [currentPageApproved, setCurrentPageApproved] = useState(0);
+  const [loading, setLoading] = useState(true); // Add loading state
+  const storedUserData = JSON.parse(sessionStorage.getItem("userDetails"));
 
   useEffect(() => {
+    const headers = {
+      'Authorization': `Bearer ${storedUserData.accessToken}`,
+      'ngrok-skip-browser-warning': '69420',
+    };
+  
     const fetchData = async () => {
       try {
-        const pendingResponse = await axios.get(api + 'loan/getAllByStatus?status=UNDER_REVIEW');
+        setLoading(true); // Set loading to true before making the API call
+
+        const pendingResponse = await axios.get(api + 'loan/getAllByStatus?status=UNDER_REVIEW', { headers });
         setPendingLoans(pendingResponse.data);
-
-        const approvedResponse = await axios.get(api + 'loan/getAllByStatus?status=APPROVED');
+  
+        const approvedResponse = await axios.get(api + 'loan/getAllByStatus?status=APPROVED', { headers });
         setApprovedLoans(approvedResponse.data);
-
-        const rejectedResponse = await axios.get(api + 'loan/getAllByStatus?status=REJECTED');
+  
+        const rejectedResponse = await axios.get(api + 'loan/getAllByStatus?status=REJECTED', { headers });
         setRejectedLoans(rejectedResponse.data);
+
+        setLoading(false); // Set loading to false when the API call is complete
       } catch (error) {
-        // Handle error here
         console.error('Error fetching data:', error);
+        setLoading(false); // Set loading to false in case of an error
       }
     };
-
+  
     fetchData();
   }, []);
 
@@ -62,8 +71,6 @@ const LoanTable = () => {
     setPage(0);
   };
 
-
-
   const getLoansForPage = (loans, currentPage) => {
     const startIndex = currentPage * rowsPerPage;
     const endIndex = startIndex + rowsPerPage;
@@ -75,7 +82,16 @@ const LoanTable = () => {
       <div className="loan-container">
         <h2>Pending Loans</h2>
         <div className="table-container">
-          {pendingLoans.length > 0 ? (
+          {loading ? ( 
+               <div className='loader-container'>
+               <TailSpin
+                   type="TailSpin"
+                   color="red"
+                   height={100}
+                   width={150}
+               />
+           </div>
+          ) : pendingLoans.length > 0 ? (
             <TableContainer component={Paper}>
               <Table>
                 <TableHead>
@@ -89,9 +105,11 @@ const LoanTable = () => {
                 </TableHead>
                 <TableBody>
                   {getLoansForPage(pendingLoans, page).map(loan => (
-                    <TableRow key={loan.loanId}
-                    component={Link} 
-                    to={`/loans/${loan.loanId}`}>
+                    <TableRow
+                      key={loan.loanId}
+                      component={Link}
+                      to={`/loans/${loan.loanId}`}
+                    >
                       <TableCell>{loan.loanId}</TableCell>
                       <TableCell>{loan.accountNumber}</TableCell>
                       <TableCell>{loan.typeOfLoan}</TableCell>
@@ -102,14 +120,12 @@ const LoanTable = () => {
                 </TableBody>
               </Table>
               <TablePagination
-                
                 component="div"
                 count={pendingLoans.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
-           
               />
             </TableContainer>
           ) : (
@@ -121,7 +137,7 @@ const LoanTable = () => {
       <div className="loan-container">
         <h2>Loan History</h2>
         <div className="table-container">
-          {approvedLoans.concat(rejectedLoans).length > 0 ? (
+          {loading ? null : approvedLoans.concat(rejectedLoans).length > 0 ? (
             <TableContainer component={Paper}>
               <Table>
                 <TableHead>
@@ -152,7 +168,6 @@ const LoanTable = () => {
                 </TableBody>
               </Table>
               <TablePagination
-                
                 component="div"
                 count={approvedLoans.length + rejectedLoans.length}
                 rowsPerPage={rowsPerPage}

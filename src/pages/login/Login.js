@@ -14,6 +14,7 @@ import { Alert } from '@mui/material';
 import './Login.css';
 import img2 from '../../assests/logo-removebg-preview (1).png';
 import api from '../../Api/api';
+import { TailSpin } from 'react-loader-spinner'; // Import the Loader component
 
 function Login() {
   const [isManagerLogin, setIsManagerLogin] = useState(false);
@@ -21,9 +22,11 @@ function Login() {
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
+  const [loading, setLoading] = useState(false); // Add a loading state and set it to false initially
 
   const handleLogin = async () => {
     try {
+      setLoading(true); // Set loading to true before making the API call
 
       const loginData = {
         accountNumber: emailOrAccount,
@@ -40,7 +43,6 @@ function Login() {
       });
 
       if (response.ok) {
-       
         const data = await response.json();
         sessionStorage.setItem('userDetails', JSON.stringify(data));
         setSuccessMessage("Login successful. Redirecting...");
@@ -57,6 +59,8 @@ function Login() {
       }
     } catch (error) {
       setErrorMessage("An error occurred. Please try again.");
+    } finally {
+      setLoading(false); // Set loading to false after the API call is complete
     }
   };
 
@@ -93,7 +97,7 @@ function Login() {
               <MDBInput
                 onChange={(e) => setEmailOrAccount(e.target.value)}
                 wrapperClass='mb-4'
-                label={isManagerLogin ? 'User Name' : 'Account Number'}
+                label={isManagerLogin ? 'Manger ID' : 'Account Number'}
                 id='form1'
                 type='text'
                 pattern={isManagerLogin ? undefined : "[0-9]{16}"}
@@ -144,7 +148,16 @@ function Login() {
                 </p>
               </div>
 
-
+              {loading && ( // Render the Loader component when loading is true
+                <div className='loader-container'>
+                  <TailSpin
+                    type="TailSpin"
+                    color="red"
+                    height={100}
+                    width={150}
+                  />
+                </div>
+              )}
             </MDBCardBody>
           </MDBCard>
         </MDBCol>

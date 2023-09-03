@@ -5,6 +5,7 @@ import './HomeLoan.css';
 import api from '../../../Api/api';
 import Swal from 'sweetalert2';
 import { Alert } from '@mui/material';
+import { TailSpin } from 'react-loader-spinner'; // Import the Loader component
 
 function HomeLoanComponent() {
   const [errorMsg, setErrorMsg] = useState(null);
@@ -18,12 +19,11 @@ function HomeLoanComponent() {
   const [otpVerified, setOtpVerified] = useState(false);
   const [salarySlip, setSalarySlip] = useState(null);
   const [houseDocumentsFile, setHouseDocumentsFile] = useState(null);
+  const [loading, setLoading] = useState(false); // Add a loading state
   const storedUserData = JSON.parse(sessionStorage.getItem("userDetails")) || {};
   const accountNumber = storedUserData.accNo || sessionStorage.getItem("accountNumber");
   const [error, setError] = useState(null); // For displaying error messages
   const steps = ['Loan Details', 'Upload Documents', 'Review and Submit'];
-
-
 
   const refreshTabl = () => {
     setTablRefresh(true);
@@ -33,6 +33,8 @@ function HomeLoanComponent() {
     setError(null);
 
     try {
+      setLoading(true); // Set loading to true before making the API call
+
       const otpResponse = await fetch(api + "otp/sendOtp", {
         method: "POST",
         headers: {
@@ -56,6 +58,8 @@ function HomeLoanComponent() {
       console.error("OTP generation error:", error);
       setError("Error generating OTP");
       setErrorMsg("An error occurred while generating OTP. Please try again.");
+    } finally {
+      setLoading(false); // Set loading to false after the API call is complete
     }
   };
 
@@ -63,6 +67,8 @@ function HomeLoanComponent() {
     setError(null);
 
     try {
+      setLoading(true); // Set loading to true before making the API call
+
       const otpResponse = await fetch(api + "otp/verifyOtp", {
         method: "POST",
         headers: {
@@ -95,9 +101,10 @@ function HomeLoanComponent() {
         title: 'Error',
         text: 'An error occurred while verifying OTP. Please try again.',
       });
+    } finally {
+      setLoading(false); // Set loading to false after the API call is complete
     }
   };
-
 
   const applyForLoan = () => {
     if (otpVerified) {
@@ -107,6 +114,8 @@ function HomeLoanComponent() {
         type: "HOME_LOAN",
         tenure: tenure,
       };
+
+      setLoading(true); // Set loading to true before making the API call
 
       fetch(api + 'loan/apply', {
         method: "POST",
@@ -140,7 +149,6 @@ function HomeLoanComponent() {
           setOtpSent(false);
           setOtpVerified(false)
           console.log("Loan application successful:", data);
-
         })
         .catch(error => {
           console.error("Error applying for loan:", error);
@@ -149,6 +157,9 @@ function HomeLoanComponent() {
             title: 'Error',
             text: 'Error applying for loan',
           });
+        })
+        .finally(() => {
+          setLoading(false); // Set loading to false after the API call is complete
         });
     } else {
       console.log("Please verify OTP before applying for the loan.");
@@ -175,8 +186,18 @@ function HomeLoanComponent() {
 
   return (
     <div>
-       {errorMsg && (
-        <div className='otperror' style={{marginTop:"-10px",paddingBottom:"10px"}}>
+      {loading && ( // Render the Loader component when loading is true
+        <div className='loader-container'>
+          <TailSpin
+            type="TailSpin"
+            color="red"
+            height={100}
+            width={150}
+          />
+        </div>
+      )}
+      {errorMsg && (
+        <div className='otperror' style={{ marginTop: "-10px", paddingBottom: "10px" }}>
           <Alert severity="error" onClose={() => setErrorMsg(null)}>
             {errorMsg}
           </Alert>
@@ -191,7 +212,6 @@ function HomeLoanComponent() {
       )}
       <HomeHistoryTable tableRefresh={tablRefresh} refreshTable={refreshTabl} />
       <div className="sign-container">
-
         <h3>Apply for Home Loan</h3>
         <Stepper activeStep={activeStep} alternativeLabel>
           {steps.map(label => (
@@ -200,7 +220,6 @@ function HomeLoanComponent() {
             </Step>
           ))}
         </Stepper>
-
         <div className="sign-contain">
           {activeStep === 0 && (
             <div className='loan-details'>
@@ -211,7 +230,6 @@ function HomeLoanComponent() {
                 label="Loan Amount"
                 value={loanAmount}
                 onChange={e => setLoanAmount(e.target.value)}
-
               />
               <TextField
                 className='textfield'
@@ -225,7 +243,6 @@ function HomeLoanComponent() {
               </div>
             </div>
           )}
-
           {activeStep === 1 && (
             <div className='loan-documents'>
               <Typography variant="h5">Upload Documents</Typography>
@@ -262,7 +279,6 @@ function HomeLoanComponent() {
               </div>
             </div>
           )}
-
           {activeStep === 2 && (
             <div>
               <Typography variant="h5">Review and Submit</Typography>
@@ -270,12 +286,11 @@ function HomeLoanComponent() {
               <p>Tenure: {tenure} Years</p>
               {salarySlip && <p>Salary Slip: {salarySlip.name}</p>}
               {houseDocumentsFile && <p>House Documents: {houseDocumentsFile.name}</p>}
-              
               <div className="button-container">
                 <Button className="button back" onClick={handleBack}>Back</Button>
                 <Button className="button next" onClick={applyForLoan} disabled={!otpVerified}>
-                Apply for Loan
-              </Button>
+                  Apply for Loan
+                </Button>
               </div>
             </div>
           )}

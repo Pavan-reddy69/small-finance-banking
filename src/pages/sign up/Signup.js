@@ -5,7 +5,7 @@ import { FaUser, FaEnvelope, FaCalendar, FaPhone, FaIdCard, FaCamera } from 'rea
 import './Signup.css';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-
+import Header from '../../components/Header/Header';
 import api from '../../Api/api';
 const steps = ['User Information', 'Upload Images', 'Review Details', 'Success'];
 
@@ -115,6 +115,7 @@ const SignUpPage = () => {
         }
     };
     const renderStepContent = () => {
+
         switch (activeStep) {
             case 0:
                 return (
@@ -330,6 +331,8 @@ const SignUpPage = () => {
         }
     };
     return (
+        <div>
+            <Header/>
         <Container className="signup-container">
             <h2 className="mb-4">Sign Up</h2>
             <Stepper activeStep={activeStep} alternativeLabel>
@@ -344,6 +347,7 @@ const SignUpPage = () => {
 
             </form>
         </Container>
+        </div>
     );
 };
 

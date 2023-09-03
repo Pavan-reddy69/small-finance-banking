@@ -5,6 +5,7 @@ import './Education.css';
 import api from '../../../Api/api';
 import Swal from 'sweetalert2';
 import { Alert } from '@mui/material';
+import Loader, { TailSpin } from 'react-loader-spinner'; // Import the loader component
 
 function EducationLoanComponent() {
   const [errorMsg, setErrorMsg] = useState(null);
@@ -20,6 +21,7 @@ function EducationLoanComponent() {
   const [collegeAdmissionFile, setCollegeAdmissionFile] = useState(null);
   const [houseDocumentsFile, setHouseDocumentsFile] = useState(null);
   const [error, setError] = useState(null); // For displaying error messages
+  const [loading, setLoading] = useState(false); // Add a loading state
 
   const steps = ['Loan Details', 'Upload Documents', 'Review and Submit'];
 
@@ -30,12 +32,14 @@ function EducationLoanComponent() {
     setError(null);
 
     try {
+      setLoading(true); // Set loading to true before making the API call
+
       const otpResponse = await fetch(api + "otp/sendOtp", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           'Authorization': `Bearer ${storedUserData.accessToken}`,
-          'ngrok-skip-browser-warning': '69420',          
+          'ngrok-skip-browser-warning': '69420',
         },
         body: JSON.stringify({
           accountNumber: accountNumber,
@@ -53,6 +57,8 @@ function EducationLoanComponent() {
       console.error("OTP generation error:", error);
       setError("Error generating OTP");
       setErrorMsg("An error occurred while generating OTP. Please try again.");
+    } finally {
+      setLoading(false); // Set loading to false after the API call is complete
     }
   };
 
@@ -60,6 +66,8 @@ function EducationLoanComponent() {
     setError(null);
 
     try {
+      setLoading(true); // Set loading to true before making the API call
+
       const otpResponse = await fetch(api + "otp/verifyOtp", {
         method: "POST",
         headers: {
@@ -92,9 +100,10 @@ function EducationLoanComponent() {
         title: 'Error',
         text: 'An error occurred while verifying OTP. Please try again.',
       });
+    } finally {
+      setLoading(false); // Set loading to false after the API call is complete
     }
   };
-
 
   const applyForLoan = () => {
     if (otpVerified) {
@@ -104,7 +113,9 @@ function EducationLoanComponent() {
         type: "EDUCATION_LOAN",
         tenure: tenure,
       };
-  
+
+      setLoading(true); // Set loading to true before making the API call
+
       fetch(api + 'loan/apply', {
         method: "POST",
         headers: {
@@ -137,6 +148,9 @@ function EducationLoanComponent() {
             text: 'Error applying for loan',
           });
           console.error("Error applying for loan:", error);
+        })
+        .finally(() => {
+          setLoading(false); // Set loading to false after the API call is complete
         });
     } else {
       Swal.fire({
@@ -147,13 +161,15 @@ function EducationLoanComponent() {
       console.log("Please verify OTP before applying for the loan.");
     }
   };
-  
+
   const uploadPDFs = (loanId) => {
     const formData = new FormData();
     formData.append('file1', collegeAdmissionFile);
     formData.append('file2', houseDocumentsFile);
     formData.append('id', loanId);
-  
+
+    setLoading(true); // Set loading to true before making the API call
+
     fetch(api + `loan/uploadSuppliments`, {
       method: "PUT",
       headers: {
@@ -187,9 +203,12 @@ function EducationLoanComponent() {
           text: 'An error occurred while uploading PDFs. Please try again.',
         });
         console.error("Error uploading PDFs:", error);
+      })
+      .finally(() => {
+        setLoading(false); // Set loading to false after the API call is complete
       });
   };
-  
+
   const [activeStep, setActiveStep] = useState(0);
 
   const handleNext = () => {
@@ -205,8 +224,18 @@ function EducationLoanComponent() {
 
   return (
     <div>
-       {errorMsg && (
-        <div className='otperror' style={{marginTop:"-10px",paddingBottom:"10px"}}>
+      {loading && ( // Render the loader when loading is true
+        <div className='loader-container'>
+          <TailSpin
+            type="TailSpin"
+            color="red"
+            height={100}
+            width={150}
+          />
+        </div>
+      )}
+      {errorMsg && (
+        <div className='otperror' style={{ marginTop: "-10px", paddingBottom: "10px" }}>
           <Alert severity="error" onClose={() => setErrorMsg(null)}>
             {errorMsg}
           </Alert>
@@ -222,7 +251,12 @@ function EducationLoanComponent() {
       <EducationHistoryTable tableRefresh={tableRefresh} refreshTable={refreshTable} />
       <div className="sign-container">
 
-        <h3>Apply for Education Loan</h3>
+        <p>1. <strong>Competitive Interest Rates:</strong> Our education loans come with competitive interest rates that are designed to make financing your education affordable. We understand the importance of accessible education, and our interest rates reflect our commitment to helping you achieve your academic goals.</p>
+
+        <p>2. <strong>Interest Rate Flexibility:</strong> We offer flexible interest rate options, including fixed and variable rates, allowing you to choose the option that best suits your financial preferences and circumstances. Fixed rates provide stability and predictability in your loan payments, while variable rates may offer lower initial costs.</p>
+
+        <p>3. <strong>Interest Subsidy for Eligible Candidates:</strong> For eligible candidates, we provide interest subsidies that can significantly reduce the overall cost of your education loan. These subsidies are aimed at supporting students from economically disadvantaged backgrounds, making higher education more accessible to all.</p>
+
         <Stepper activeStep={activeStep} alternativeLabel>
           {steps.map(label => (
             <Step key={label}>
@@ -280,7 +314,7 @@ function EducationLoanComponent() {
                     label="Enter OTP"
                     value={otp}
                     onChange={e => setOtp(e.target.value)}
-                    style={{ marginBottom: '20px' ,width:'50%',paddingRight:'20px'}}
+                    style={{ marginBottom: '20px', width: '50%', paddingRight: '20px' }}
                   />
                   <Button className="button next" onClick={verifyOTP}>Verify OTP</Button>
                 </div>
@@ -302,13 +336,13 @@ function EducationLoanComponent() {
               <p>Tenure: {tenure} Years</p>
               {collegeAdmissionFile && <p>Salary Slip: {collegeAdmissionFile.name}</p>}
               {houseDocumentsFile && <p>House Documents: {houseDocumentsFile.name}</p>}
-             
+
               <div className="button-container">
 
                 <Button className="button back" onClick={handleBack}>Back</Button>
                 <Button className="button next" onClick={applyForLoan} disabled={!otpVerified}>
-                Apply for Loan
-              </Button>
+                  Apply for Loan
+                </Button>
               </div>
             </div>
           )}

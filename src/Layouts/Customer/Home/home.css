@@ -112,7 +112,7 @@
   height: 50px;
 }
 /* Media Query for Larger Screens */
-@media screen and (min-width: 700px) {
+@media screen and (min-width: 800px) {
   .hamburger {
     display: none; /* Hide the hamburger menu for larger screens */
   }

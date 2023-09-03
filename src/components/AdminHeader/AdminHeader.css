@@ -1,7 +1,6 @@
 /* Sidebar Container */
 .sidebar {
-    width: 60px;
-    min-height: 100vh;
+    width: 200px;
     background-color: white;
     color: black;
     transition: width 0.3s;
@@ -12,18 +11,6 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.507);  
   }
   
-  .sidebar.open {
-    width: 220px;
-  }
-  
-  /* Hamburger Icon */
-  .hamburger {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  /* Sidebar Content */
   .sidebar-content {
     display: flex;
     flex-direction: column;
@@ -55,44 +42,9 @@
     height: 24px;
     margin-right: 0.5rem;
   }
+
   
-  /* Logout Button */
-  .logout {
-    font-size: medium;
-    position: fixed;
-    bottom: 0;
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: white;
-    font-weight: 600;
-    padding: 1rem;
-    transition: background-color 0.3s;
-  }
-  
-  .logout:hover {
-    background-color: none;
-  }
-  
-  /* Sidebar Toggle Button */
-  .sidebar-toggle {
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0.5rem;
-    transition: transform 0.3s;
-  }
-  
-  .sidebar-toggle.open {
-    transform: translateY(200px);
-  }
-  
-  /* Sidebar Toggle Bar */
-  .bar {
-    width: 25px;
-    height: 3px;
-    background-color: white;
-    margin: 2px 0;
-  }
+ 
+
+
   

@@ -3,10 +3,11 @@ import axios from "axios";
 import api from "../../Api/api";
 import './DepositTab.css';
 import Swal from 'sweetalert2';
+import { TailSpin } from 'react-loader-spinner'; 
 
 export default function DepositTab() {
   const [amount, setAmount] = useState("");
-  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const storedUserData = JSON.parse(sessionStorage.getItem("userDetails"));
 
   const loadScript = (src) => {
@@ -28,6 +29,8 @@ export default function DepositTab() {
 
   const handlePaymentSuccess = async (paymentId) => {
     try {
+      setLoading(true);
+
       const accessToken = storedUserData.accessToken;
 
       const apiResponse = await axios.post(
@@ -45,6 +48,9 @@ export default function DepositTab() {
           }
         }
       );
+
+      setLoading(false);
+
       Swal.fire({
         icon: 'success',
         title: 'Success',
@@ -52,6 +58,8 @@ export default function DepositTab() {
       });
       setAmount('');
     } catch (error) {
+      setLoading(false);
+
       Swal.fire({
         icon: 'error',
         title: 'Error',
@@ -94,6 +102,16 @@ export default function DepositTab() {
       <h2 className="deposit-heading">Deposit</h2>
       <div className="card deposit-card">
         <div className="card-body">
+          {loading && ( // Render the loader when loading is true
+            <div className="loader-container">
+              <TailSpin
+                type="TailSpin"
+                color="red"
+                height={100}
+                width={150}
+              />
+            </div>
+          )}
           <div className="form-group">
             <label htmlFor="amount" className="deposit-label">
               Amount to Deposit:
@@ -107,7 +125,7 @@ export default function DepositTab() {
               className="deposit-input"
             />
           </div>
-          {error && <p className="text-danger">{error}</p>}
+      
           <button
             className="btn btn-primary deposit-button"
             onClick={() => displayRazorpay(amount)}

@@ -5,6 +5,7 @@ import './MortgageLoan.css';
 import api from '../../../Api/api';
 import Swal from 'sweetalert2';
 import { Alert } from '@mui/material';
+import Loader, { TailSpin } from 'react-loader-spinner'; // Import the Loader component
 
 function PersonalLoanComponent() {
   const [errorMsg, setErrorMsg] = useState(null);
@@ -18,9 +19,10 @@ function PersonalLoanComponent() {
   const [otpVerified, setOtpVerified] = useState(false);
   const [salarySlip, setSalarySlip] = useState(null);
   const [houseDocumentsFile, setHouseDocumentsFile] = useState(null);
+  const [loading, setLoading] = useState(false); // Add a loading state
   const storedUserData = JSON.parse(sessionStorage.getItem("userDetails")) || {};
   const accountNumber = storedUserData.accNo || sessionStorage.getItem("accountNumber");
-  const [error, setError] = useState(null); 
+  const [error, setError] = useState(null);
   const steps = ['Loan Details', 'Upload Documents', 'Review and Submit'];
 
   const refreshTable = () => {
@@ -31,6 +33,8 @@ function PersonalLoanComponent() {
     setError(null);
 
     try {
+      setLoading(true); // Set loading to true before making the API call
+
       const otpResponse = await fetch(api + "otp/sendOtp", {
         method: "POST",
         headers: {
@@ -54,6 +58,8 @@ function PersonalLoanComponent() {
       console.error("OTP generation error:", error);
       setError("Error generating OTP");
       setErrorMsg("An error occurred while generating OTP. Please try again.");
+    } finally {
+      setLoading(false); // Set loading to false after the API call is complete
     }
   };
 
@@ -61,6 +67,8 @@ function PersonalLoanComponent() {
     setError(null);
 
     try {
+      setLoading(true); // Set loading to true before making the API call
+
       const otpResponse = await fetch(api + "otp/verifyOtp", {
         method: "POST",
         headers: {
@@ -93,6 +101,8 @@ function PersonalLoanComponent() {
         title: 'Error',
         text: 'An error occurred while verifying OTP. Please try again.',
       });
+    } finally {
+      setLoading(false); // Set loading to false after the API call is complete
     }
   };
 
@@ -106,6 +116,8 @@ function PersonalLoanComponent() {
         tenure: tenure,
       };
 
+      setLoading(true); // Set loading to true before making the API call
+
       fetch(api + 'loan/apply', {
         method: "POST",
         headers: {
@@ -116,6 +128,8 @@ function PersonalLoanComponent() {
         body: JSON.stringify(loanData)
       })
         .then(response => {
+          setLoading(false); // Set loading to false after the API call is complete
+
           if (!response.ok) {
             Swal.fire({
               icon: 'error',
@@ -159,6 +173,7 @@ function PersonalLoanComponent() {
       });
     }
   };
+
   const [activeStep, setActiveStep] = useState(0);
 
   const handleNext = () => {
@@ -175,7 +190,7 @@ function PersonalLoanComponent() {
   return (
     <div>
       {errorMsg && (
-        <div className='otperror' style={{marginTop:"-10px",paddingBottom:"10px"}}>
+        <div className='otperror' style={{ marginTop: "-10px", paddingBottom: "10px" }}>
           <Alert severity="error" onClose={() => setErrorMsg(null)}>
             {errorMsg}
           </Alert>
@@ -279,6 +294,16 @@ function PersonalLoanComponent() {
           )}
         </div>
       </div>
+      {loading && ( // Render the Loader component when loading is true
+        <div className='loader-container'>
+          <TailSpin
+            type="TailSpin"
+            color="red"
+            height={100}
+            width={150}
+          />
+        </div>
+      )}
     </div>
   );
 }

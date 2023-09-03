@@ -3,11 +3,13 @@ import './Details.css';
 import TransactionTable from '../TransactionTable/TransactionTable';
 import { useNavigate } from 'react-router-dom';
 import api from '../../Api/api';
+import {TailSpin} from 'react-loader-spinner'; // Import the loader component
 
 const DetailsComponent = () => {
   const navigate = useNavigate();
 
   const [userDetails, setUserDetails] = useState({});
+  const [loading, setLoading] = useState(true);
   const storedUserData = JSON.parse(sessionStorage.getItem("userDetails")) || {};
   const accountNumber = storedUserData.accNo || sessionStorage.getItem("accountNumber");
 
@@ -25,10 +27,10 @@ const DetailsComponent = () => {
 
   useEffect(() => {
     if (userDetails.accNo) {
+      setLoading(true);
 
       fetchUpdatedFields()
         .then((updatedFields) => {
-
           const updatedUserDetails = {
             ...userDetails,
             loanAmount: updatedFields.loanAmount,
@@ -42,22 +44,24 @@ const DetailsComponent = () => {
         })
         .catch((error) => {
           console.error("Error fetching updated fields:", error);
+        })
+        .finally(() => {
+          setLoading(false);
         });
     }
   }, [userDetails.accNo]);
 
-
   const fetchUpdatedFields = async () => {
     try {
-      const accessToken = storedUserData.accessToken; // Assuming the access token is stored in storedUserData
-  
+      const accessToken = storedUserData.accessToken;
+
       const response = await fetch(api + 'Account/homePage?accNo=' + storedUserData.accNo, {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
           'ngrok-skip-browser-warning': '69420',
         }
       });
-  
+
       if (response.ok) {
         const updatedFields = await response.json();
         return updatedFields;
@@ -68,7 +72,7 @@ const DetailsComponent = () => {
       throw new Error("Failed to fetch updated fields");
     }
   };
-  
+
   return (
     <div className="details-container">
       <div className="card-row">
@@ -88,13 +92,22 @@ const DetailsComponent = () => {
           <div className="column">
             <p>Loan Amount: Rs.{userDetails.loanAmount}</p>
             <p>Deposit Amount: Rs.{userDetails.depositAmount}</p>
-            
           </div>
         </div>
 
-
         <div className="transaction-table">
-          <TransactionTable />
+          {loading ? (
+           <div className="loader-container">
+            <TailSpin
+              type="TailSpin" 
+              color="red" 
+              height={100} 
+              width={150} 
+            />
+                </div>
+          ) : (
+            <TransactionTable />
+          )}
         </div>
         <button className="view-all-button" onClick={handleClick}>
           View All Transactions

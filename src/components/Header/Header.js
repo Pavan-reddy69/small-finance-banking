@@ -7,7 +7,9 @@ function Header() {
   
   return (
     <div className="nav">
-      <img className='logo' decoding="async" src={logoImage} alt="Logo" />
+      <Link to="/"> 
+        <img className='logo' decoding="async" src={logoImage} alt="Logo" />
+      </Link>
       <div className='saving'>
         <a href='signup'>Create Your Savings Account Now</a>
       </div>

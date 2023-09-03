@@ -1,52 +1,52 @@
 import React, { useState, useEffect } from 'react';
 import './Profile.css';
 import api from '../../../Api/api';
+import Loader, { TailSpin } from 'react-loader-spinner'; // Import the Loader component
 
 function Profile() {
   const [userDetails, setUserDetails] = useState({});
-  const storedUserDetails = sessionStorage.getItem('userDetails');
+  const [loading, setLoading] = useState(false); // Add a loading state and set it to false initially
+  const storedUserDetails =  JSON.parse(sessionStorage.getItem("userDetails"));
 
   useEffect(() => {
-  
     const storedUserDetails = sessionStorage.getItem('userDetails');
     if (storedUserDetails) {
       setUserDetails(JSON.parse(storedUserDetails));
     }
-
   }, []);
-  const maskedAadharNumber = userDetails.aadharCardNumber
-  ? userDetails.aadharCardNumber.substring(0, 4) + '-XXXX-XXXX'
-  : '';
 
-const maskedPanNumber = userDetails.panCardNumber
-  ? userDetails.panCardNumber.substring(0, 4) + 'XXXX'
-  : '';
+  const maskedAadharNumber = userDetails.aadharCardNumber
+    ? userDetails.aadharCardNumber.substring(0, 4) + '-XXXX-XXXX'
+    : '';
+
+  const maskedPanNumber = userDetails.panCardNumber
+    ? userDetails.panCardNumber.substring(0, 4) + 'XXXX'
+    : '';
 
   const handlePasswordChange = () => {
-    
-    fetch(api+'user/resetPassword?email='+userDetails.accNo, {
+    setLoading(true); // Set loading to true before making the API call
+    fetch(api + 'user/resetPassword?email=' + userDetails.accNo, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${storedUserDetails.accessToken}`,
-        'ngrok-skip-browser-warning': '69420',  
+        'ngrok-skip-browser-warning': '69420',
       },
-      body: JSON.stringify({}), 
+      body: JSON.stringify({}),
     })
       .then(response => {
+        setLoading(false); // Set loading to false after the API call is complete
         if (response.ok) {
-
           alert('Reset link sent to your mail.');
         } else {
-
           console.error('POST request failed:', response.statusText);
         }
       })
       .catch(error => {
+        setLoading(false); // Set loading to false in case of an error
         console.error('Error performing POST:', error);
       });
   };
-  
 
   return (
     <div className="profile-container">
@@ -69,6 +69,17 @@ const maskedPanNumber = userDetails.panCardNumber
       </div>
 
       <button className="button" onClick={handlePasswordChange}>Change Your Password</button>
+
+      {loading && ( 
+        <div className='loader-container'>
+        <TailSpin
+          type="TailSpin"
+          color="red"
+          height={100}
+          width={150}
+        />
+      </div>
+      )}
     </div>
   );
 }
