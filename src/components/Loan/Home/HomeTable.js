@@ -9,7 +9,7 @@ import {
   Box
 } from "@mui/material";
 import api from "../../../Api/api";
-import Loader, { TailSpin } from 'react-loader-spinner'; // Import the Loader component
+import { TailSpin } from 'react-loader-spinner'; // Import the Loader component
 
 const HomeHistoryTable = ({ tablRefresh, refreshTable }) => {
   const [homeHistory, setHomeHistory] = useState([]);

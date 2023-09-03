@@ -1,18 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Stepper, Step, StepLabel, Button, Typography, TextField } from '@mui/material';
 import PersonalHistoryTable from './MortgageTable';
 import './MortgageLoan.css';
 import api from '../../../Api/api';
 import Swal from 'sweetalert2';
 import { Alert } from '@mui/material';
-import Loader, { TailSpin } from 'react-loader-spinner'; // Import the Loader component
+import  { TailSpin } from 'react-loader-spinner'; // Import the Loader component
 
 function PersonalLoanComponent() {
   const [errorMsg, setErrorMsg] = useState(null);
   const [successMsg, setSuccessMsg] = useState(null);
   const [loanAmount, setLoanAmount] = useState(0);
   const [tenure, setTenure] = useState(0);
-  const [interestDetails, setInterestDetails] = useState(null);
   const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState('');
   const [tableRefresh, setTableRefresh] = useState(false);

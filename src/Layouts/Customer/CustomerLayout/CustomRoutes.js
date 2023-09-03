@@ -28,9 +28,8 @@ const Routers = () => {
   };
 
   useEffect(() => {
-    // Check KYC status on each route change (page navigation)
     checkKYCStatus();
-  }, [location.pathname]); // This effect runs whenever the pathname changes
+  }, [location.pathname]); 
 
   return (
     <Routes>
