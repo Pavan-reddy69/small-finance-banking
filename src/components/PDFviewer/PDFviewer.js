@@ -5,19 +5,14 @@ import { Document, Page, pdfjs } from 'react-pdf';
 // Configure the worker path for PDF.js
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
-
-
-const PDFViewer= ({ url }) => {
+const PDFViewer = ({ url, headers }) => {
     const [numPages, setNumPages] = useState(null);
     const [pageNumber, setPageNumber] = useState(1);
-    const [fileUrl, setFileUrl] = useState("")
+    const [fileUrl, setFileUrl] = useState("");
 
     useEffect(() => {
-        console.log('url',url)
-       setFileUrl(url);
-    }, [url])
-
-
+        setFileUrl(url);
+    }, [url]);
 
     const onDocumentLoadSuccess = ({ numPages }) => {
         setNumPages(numPages);
@@ -30,6 +25,9 @@ const PDFViewer= ({ url }) => {
                     <Document
                         file={fileUrl ? fileUrl : ""}
                         onLoadSuccess={onDocumentLoadSuccess}
+                        options={{
+                            httpHeaders: headers,
+                        }}
                     >
                         {Array.from(new Array(numPages), (el, index) => (
                             <Page

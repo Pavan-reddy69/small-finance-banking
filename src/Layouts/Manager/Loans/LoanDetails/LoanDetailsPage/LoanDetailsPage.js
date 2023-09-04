@@ -96,13 +96,13 @@ const LoanDetailsPage = () => {
     if (loading) {
         return (
             <div className='loader-container'>
-               <TailSpin
-                   type="TailSpin"
-                   color="red"
-                   height={100}
-                   width={150}
-               />
-           </div>
+                <TailSpin
+                    type="TailSpin"
+                    color="red"
+                    height={100}
+                    width={150}
+                />
+            </div>
         );
     }
     return (
@@ -128,20 +128,28 @@ const LoanDetailsPage = () => {
             </div>
 
             <div className="card-container-docs">
-                <div className="card-doc1">
-                    <p>Document 1:</p>
-                    {console.log('file1',loanAndUserDetails.loanSuppliment2)}
-                   <PDFViewer url={loanAndUserDetails.loanSuppliment2}/>
-                </div>
-                <div className="card-doc2">
-                    <p>Document 2:</p>
-                    <iframe
-                        title="Document 2"
-                        src={loanAndUserDetails.loanSuppliment2}
-                        className="pdf-iframe"
-                    />
-                </div>
-            </div>
+    <div className="card-doc1">
+       
+        <iframe
+            title="Document 1"
+            src={loanAndUserDetails.loanSuppliment1}
+            className="pdf-iframe"
+            style={{ display: 'none' }}
+        />
+    </div>
+    <div className="card-doc2">
+     
+        <iframe
+            title="Document 2"
+            src={loanAndUserDetails.loanSuppliment2}
+            className="pdf-iframe"
+            style={{ display: 'none' }}
+        />
+    </div>
+</div>
+
+
+
             <div className="approval-buttons-loan">
                 <button className="approve-button-loan" onClick={handleApproveLoan}>
                     Approve

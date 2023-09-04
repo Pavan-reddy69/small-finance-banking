@@ -31,7 +31,7 @@ const AboutSection = () => {
                     <p>
                         Why should only the finance nerds have all the fun and high
                         returns? All you have to do is invest your money and go do your
-                        thing, while DBS takes care of the rest.
+                        thing, while APA takes care of the rest.
                     </p>
 
 

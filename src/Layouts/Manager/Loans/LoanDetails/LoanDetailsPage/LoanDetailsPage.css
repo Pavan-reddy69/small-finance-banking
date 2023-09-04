@@ -15,7 +15,7 @@
 
 .card-loan {
     background-color: rgba(201, 195, 195, 0.648);
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(1px);
     border-radius: 10px;
     border: 1px solid rgba(212, 209, 209, 0.758);
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
@@ -29,7 +29,7 @@
     flex-direction: row;
     max-width: 95%;
     padding: 10px;
-    gap: 20px;
+    gap: 200px;
 }
 
 .pdf-container {
@@ -79,4 +79,41 @@
 }
 .reject-button-loan:hover{
     background-color: rgba(167, 12, 12, 0.696)
+}
+@media (max-width: 768px) {
+    .card-loan,.card-user {
+        min-width: 50%; /* Make cards full width on smaller screens */
+    }
+}
+
+/* Common styles for approval buttons */
+.approval-buttons-loan {
+    display: flex;
+    flex-wrap: wrap; /* Allow buttons to wrap to the next line on small screens */
+    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    gap: 20px; /* Adjust gap for smaller screens */
+}
+
+/* Adjust button width for smaller screens */
+.approve-button-loan,
+.reject-button-loan {
+    width: 100%; /* Make buttons full width on smaller screens */
+}
+
+/* Adjust button spacing for smaller screens */
+.approve-button-loan,
+.reject-button-loan {
+    margin-bottom: 10px; /* Add some space between buttons */
+}
+
+/* Add hover styles for buttons */
+.approve-button-loan:hover {
+    background-color: #0056b3;
+}
+
+.reject-button-loan:hover {
+    background-color: rgba(167, 12, 12, 0.696);
 }

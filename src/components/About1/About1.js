@@ -44,7 +44,7 @@ const About1 = () => {
                 </div>
                 
                 <p className="Bank2" style={{paddingLeft:'40px'}}>
-                  World’s Best Digital Bank, now in your city. Get ready to enjoy an experience like never before with DBS!
+                  World’s Best Digital Bank, now in your city. Get ready to enjoy an experience like never before with APA!
                 </p>
                 
               </div>
