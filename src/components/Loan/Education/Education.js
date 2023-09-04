@@ -293,59 +293,76 @@ function EducationLoanComponent() {
             </div>
           )}
 
-          {activeStep === 1 && (
-            <div className='loan-documents'>
+{activeStep === 1 && (
+            <div className="loan-documents">
               <Typography variant="h5">Upload Documents</Typography>
               <p>College Admission File</p>
               <input
-                label="College Admission File"
                 type="file"
-              
-                onChange={e => setCollegeAdmissionFile(e.target.files[0])}
+                accept=".pdf"
+                onChange={(e) => setCollegeAdmissionFile(e.target.files[0])}
                 style={{ marginBottom: '20px' }}
               />
-              <p>House Documents</p>
+              <p>Land Documents</p>
               <input
-                label="House Documents"
                 type="file"
-              
-                onChange={e => setHouseDocumentsFile(e.target.files[0])}
+                accept=".pdf"
+                onChange={(e) => setHouseDocumentsFile(e.target.files[0])}
                 style={{ marginBottom: '20px' }}
               />
+       
+              <div className="button-container">
+                <Button className="button back" onClick={handleBack}>
+                  Back
+                </Button>
+                <Button className="button next" onClick={handleNext}>
+                  Next
+                </Button>
+              </div>
+            </div>
+          )}
              
-          {activeStep === 2 && (
-            <div className='Apply-loan'>
+             {activeStep === 2 && (
+            <div>
               <Typography variant="h5">Review and Submit</Typography>
               <p>Loan Amount: {loanAmount}</p>
               <p>Tenure: {tenure} Years</p>
               {collegeAdmissionFile && <p>Salary Slip: {collegeAdmissionFile.name}</p>}
-              {houseDocumentsFile && <p>House Documents: {houseDocumentsFile.name}</p>}
-              {otpSent && (
+              {houseDocumentsFile && (
+                <p>House Documents: {houseDocumentsFile.name}</p>
+              )}
+                     {otpSent && (
                 <div>
                   <TextField
                     className="form-control"
                     label="Enter OTP"
                     value={otp}
-                    onChange={e => setOtp(e.target.value)}
-                    style={{ marginBottom: '20px', width: '50%', paddingRight: '20px' }}
+                    onChange={(e) => setOtp(e.target.value)}
+                    style={{
+                      marginBottom: '20px',
+                      width: '50%',
+                      paddingRight: '20px',
+                    }}
                   />
-                  <Button className="button next" onClick={verifyOTP}>Verify OTP</Button>
+                  <Button className="button next" onClick={verifyOTP}>
+                    Verify OTP
+                  </Button>
                 </div>
               )}
               {!otpSent && (
-                <Button className="button next" onClick={generateOTP}>Generate OTP</Button>
+                <Button className="button next" onClick={generateOTP}>
+                  Generate OTP
+                </Button>
               )}
               <div className="button-container">
-                <Button className="button back" onClick={handleBack}>Back</Button>
-                <Button className="button next" onClick={handleNext}>Next</Button>
-              </div>
-            </div>
-          )}
-
-              <div className="button-container">
-
-                <Button className="button back" onClick={handleBack}>Back</Button>
-                <Button className="button next" onClick={applyForLoan} disabled={!otpVerified}>
+                <Button className="button back" onClick={handleBack}>
+                  Back
+                </Button>
+                <Button
+                  className="button next"
+                  onClick={applyForLoan}
+                  disabled={!otpVerified}
+                >
                   Apply for Loan
                 </Button>
               </div>

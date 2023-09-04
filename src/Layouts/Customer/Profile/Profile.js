@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Profile.css';
 import api from '../../../Api/api';
 import Loader, { TailSpin } from 'react-loader-spinner'; // Import the Loader component
-
+import Swal from 'sweetalert2';
 function Profile() {
   const [userDetails, setUserDetails] = useState({});
   const [loading, setLoading] = useState(false); // Add a loading state and set it to false initially
@@ -37,7 +37,11 @@ function Profile() {
       .then(response => {
         setLoading(false); // Set loading to false after the API call is complete
         if (response.ok) {
-          alert('Reset link sent to your mail.');
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: "Reset link sent to your mail!",
+          });
         } else {
           console.error('POST request failed:', response.statusText);
         }
