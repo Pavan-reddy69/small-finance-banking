@@ -115,7 +115,7 @@ function PersonalLoanComponent() {
         tenure: tenure,
       };
 
-      setLoading(true); // Set loading to true before making the API call
+      setLoading(true); 
 
       fetch(api + 'loan/apply', {
         method: "POST",
@@ -140,20 +140,9 @@ function PersonalLoanComponent() {
           return response.json();
         })
         .then(data => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: "Education Loan application successful!",
-          });
-
-          setActiveStep(0);
-          setLoanAmount('');
-          setTenure('');
-          setOtpSent(false);
-          setOtpVerified(false);
-          setTableRefresh(true);
-          console.log("Loan application successful:", data);
-          // Handle success scenario here, if needed
+          const loanId = data.loanId;
+          console.log('Loan ID:', loanId);
+          uploadPDFs(loanId);
         })
         .catch(error => {
           console.error("Error applying for loan:", error);
@@ -173,6 +162,55 @@ function PersonalLoanComponent() {
     }
   };
 
+  const uploadPDFs = (loanId) => {
+    const formData = new FormData();
+    formData.append('file1', salarySlip);
+    formData.append('file2', houseDocumentsFile);
+   
+    console.log('loanId',loanId);
+    setLoading(true); 
+
+    fetch(api + `loan/uploadSuppliments/${loanId}`, {
+      method: "PUT",
+      headers: {
+        'Authorization': `Bearer ${storedUserData.accessToken}`,
+        'ngrok-skip-browser-warning': '69420',
+      },
+      body: formData,
+    })
+      .then(response => {
+        if (response.ok) {
+          setActiveStep(0);
+          setLoanAmount('');
+          setTenure('');
+          setOtpSent(false);
+          setOtpVerified(false)
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: "Loan application and PDFs uploaded successfully!",
+          });
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'An error occurred while uploading PDFs. Please try again.',
+          });
+          console.error("Error uploading PDFs");
+        }
+      })
+      .catch(error => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'An error occurred while uploading PDFs. Please try again.',
+        });
+        console.error("Error uploading PDFs:", error);
+      })
+      .finally(() => {
+        setLoading(false); // Set loading to false after the API call is complete
+      });
+  };
   const [activeStep, setActiveStep] = useState(0);
 
   const handleNext = () => {
@@ -188,7 +226,12 @@ function PersonalLoanComponent() {
 
   return (
     <div>
-      {errorMsg && (
+
+      <PersonalHistoryTable tableRefresh={tableRefresh} refreshTable={refreshTable} />
+      <div className="sign-container">
+
+        <h3>Apply for Personal Loan</h3>
+        {errorMsg && (
         <div className='otperror' style={{ marginTop: "-10px", paddingBottom: "10px" }}>
           <Alert severity="error" onClose={() => setErrorMsg(null)}>
             {errorMsg}
@@ -202,10 +245,6 @@ function PersonalLoanComponent() {
           </Alert>
         </div>
       )}
-      <PersonalHistoryTable tableRefresh={tableRefresh} refreshTable={refreshTable} />
-      <div className="sign-container">
-
-        <h3>Apply for Personal Loan</h3>
         <Stepper activeStep={activeStep} alternativeLabel>
           {steps.map(label => (
             <Step key={label}>
@@ -254,6 +293,21 @@ function PersonalLoanComponent() {
                 onChange={e => setHouseDocumentsFile(e.target.files[0])}
                 style={{ marginBottom: '20px' }}
               />
+             
+              <div className="button-container">
+                <Button className="button back" onClick={handleBack}>Back</Button>
+                <Button className="button next" onClick={handleNext}>Next</Button>
+              </div>
+            </div>
+          )}
+
+          {activeStep === 2 && (
+            <div>
+              <Typography variant="h5">Review and Submit</Typography>
+              <p>Loan Amount: {loanAmount}</p>
+              <p>Tenure: {tenure} Years</p>
+              {salarySlip && <p>Salary Slip: {salarySlip.name}</p>}
+              {houseDocumentsFile && <p>House Documents: {houseDocumentsFile.name}</p>}
               {otpSent && (
                 <div>
                   <TextField
@@ -269,25 +323,12 @@ function PersonalLoanComponent() {
               {!otpSent && (
                 <Button className="button next" onClick={generateOTP}>Generate OTP</Button>
               )}
+              
               <div className="button-container">
                 <Button className="button back" onClick={handleBack}>Back</Button>
-                <Button className="button next" onClick={handleNext}>Next</Button>
-              </div>
-            </div>
-          )}
-
-          {activeStep === 2 && (
-            <div>
-              <Typography variant="h5">Review and Submit</Typography>
-              <p>Loan Amount: {loanAmount}</p>
-              <p>Tenure: {tenure} Years</p>
-              {salarySlip && <p>Salary Slip: {salarySlip.name}</p>}
-              {houseDocumentsFile && <p>House Documents: {houseDocumentsFile.name}</p>}
-              <Button className="button next" onClick={applyForLoan} disabled={!otpVerified}>
+                <Button className="button next" onClick={applyForLoan} disabled={!otpVerified}>
                 Apply for Loan
               </Button>
-              <div className="button-container">
-                <Button className="button back" onClick={handleBack}>Back</Button>
               </div>
             </div>
           )}

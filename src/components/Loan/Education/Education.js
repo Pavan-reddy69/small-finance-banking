@@ -20,8 +20,8 @@ function EducationLoanComponent() {
   const [otpVerified, setOtpVerified] = useState(false);
   const [collegeAdmissionFile, setCollegeAdmissionFile] = useState(null);
   const [houseDocumentsFile, setHouseDocumentsFile] = useState(null);
-  const [error, setError] = useState(null); // For displaying error messages
-  const [loading, setLoading] = useState(false); // Add a loading state
+  const [error, setError] = useState(null); 
+  const [loading, setLoading] = useState(false); 
 
   const steps = ['Loan Details', 'Upload Documents', 'Review and Submit'];
 
@@ -166,14 +166,13 @@ function EducationLoanComponent() {
     const formData = new FormData();
     formData.append('file1', collegeAdmissionFile);
     formData.append('file2', houseDocumentsFile);
-    formData.append('id', loanId);
+   
+    console.log('loanId',loanId);
+    setLoading(true); 
 
-    setLoading(true); // Set loading to true before making the API call
-
-    fetch(api + `loan/uploadSuppliments`, {
+    fetch(api + `loan/uploadSuppliments/${loanId}`, {
       method: "PUT",
       headers: {
-        "Content-Type": "application/json",
         'Authorization': `Bearer ${storedUserData.accessToken}`,
         'ngrok-skip-browser-warning': '69420',
       },
@@ -181,12 +180,16 @@ function EducationLoanComponent() {
     })
       .then(response => {
         if (response.ok) {
+          setActiveStep(0);
+          setLoanAmount('');
+          setTenure('');
+          setOtpSent(false);
+          setOtpVerified(false)
           Swal.fire({
             icon: 'success',
             title: 'Success',
             text: "Loan application and PDFs uploaded successfully!",
           });
-          console.log("Loan application and PDFs uploaded successfully");
         } else {
           Swal.fire({
             icon: 'error',
@@ -234,6 +237,9 @@ function EducationLoanComponent() {
           />
         </div>
       )}
+    
+      <EducationHistoryTable tableRefresh={tableRefresh} refreshTable={refreshTable} />
+      <div className="sign-container">
       {errorMsg && (
         <div className='otperror' style={{ marginTop: "-10px", paddingBottom: "10px" }}>
           <Alert severity="error" onClose={() => setErrorMsg(null)}>
@@ -248,9 +254,6 @@ function EducationLoanComponent() {
           </Alert>
         </div>
       )}
-      <EducationHistoryTable tableRefresh={tableRefresh} refreshTable={refreshTable} />
-      <div className="sign-container">
-
         <p>1. <strong>Competitive Interest Rates:</strong> Our education loans come with competitive interest rates that are designed to make financing your education affordable. We understand the importance of accessible education, and our interest rates reflect our commitment to helping you achieve your academic goals.</p>
 
         <p>2. <strong>Interest Rate Flexibility:</strong> We offer flexible interest rate options, including fixed and variable rates, allowing you to choose the option that best suits your financial preferences and circumstances. Fixed rates provide stability and predictability in your loan payments, while variable rates may offer lower initial costs.</p>
@@ -293,20 +296,30 @@ function EducationLoanComponent() {
           {activeStep === 1 && (
             <div className='loan-documents'>
               <Typography variant="h5">Upload Documents</Typography>
+              <p>College Admission File</p>
               <input
                 label="College Admission File"
                 type="file"
-                accept=".jpg"
+              
                 onChange={e => setCollegeAdmissionFile(e.target.files[0])}
                 style={{ marginBottom: '20px' }}
               />
+              <p>House Documents</p>
               <input
                 label="House Documents"
                 type="file"
-                accept=".jpg"
+              
                 onChange={e => setHouseDocumentsFile(e.target.files[0])}
                 style={{ marginBottom: '20px' }}
               />
+             
+          {activeStep === 2 && (
+            <div className='Apply-loan'>
+              <Typography variant="h5">Review and Submit</Typography>
+              <p>Loan Amount: {loanAmount}</p>
+              <p>Tenure: {tenure} Years</p>
+              {collegeAdmissionFile && <p>Salary Slip: {collegeAdmissionFile.name}</p>}
+              {houseDocumentsFile && <p>House Documents: {houseDocumentsFile.name}</p>}
               {otpSent && (
                 <div>
                   <TextField
@@ -328,14 +341,6 @@ function EducationLoanComponent() {
               </div>
             </div>
           )}
-
-          {activeStep === 2 && (
-            <div className='Apply-loan'>
-              <Typography variant="h5">Review and Submit</Typography>
-              <p>Loan Amount: {loanAmount}</p>
-              <p>Tenure: {tenure} Years</p>
-              {collegeAdmissionFile && <p>Salary Slip: {collegeAdmissionFile.name}</p>}
-              {houseDocumentsFile && <p>House Documents: {houseDocumentsFile.name}</p>}
 
               <div className="button-container">
 

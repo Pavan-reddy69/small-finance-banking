@@ -5,7 +5,7 @@ import './LoanDetailsPage.css';
 import api from '../../../../../Api/api';
 import Swal from 'sweetalert2';
 import { TailSpin } from 'react-loader-spinner';
-
+import PDFViewer from '../../../../../components/PDFviewer/PDFviewer';
 const LoanDetailsPage = () => {
     const { loanId } = useParams();
     const [loanAndUserDetails, setLoanAndUserDetails] = useState(null);
@@ -130,17 +130,14 @@ const LoanDetailsPage = () => {
             <div className="card-container-docs">
                 <div className="card-doc1">
                     <p>Document 1:</p>
-                    <iframe
-                        title="Document 1"
-                        src={loanAndUserDetails.document1Url}
-                        className="pdf-iframe"
-                    />
+                    {console.log('file1',loanAndUserDetails.loanSuppliment2)}
+                   <PDFViewer url={loanAndUserDetails.loanSuppliment2}/>
                 </div>
                 <div className="card-doc2">
                     <p>Document 2:</p>
                     <iframe
                         title="Document 2"
-                        src={loanAndUserDetails.document2Url}
+                        src={loanAndUserDetails.loanSuppliment2}
                         className="pdf-iframe"
                     />
                 </div>

@@ -14,7 +14,7 @@ import { Alert } from '@mui/material';
 import './Login.css';
 import img2 from '../../assests/logo-removebg-preview (1).png';
 import api from '../../Api/api';
-import { TailSpin } from 'react-loader-spinner'; // Import the Loader component
+import { TailSpin } from 'react-loader-spinner'; 
 
 function Login() {
   const [isManagerLogin, setIsManagerLogin] = useState(false);

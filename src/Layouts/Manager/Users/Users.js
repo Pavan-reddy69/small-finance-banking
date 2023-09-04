@@ -15,6 +15,8 @@ const Users = () => {
   const sidebarLinks = [
     { to: "/admin-home", label: "Users" },
     { to: "/loans", label: "Loans" },
+    { to: "/login", label: "Logout" },
+
    
   ];
 
