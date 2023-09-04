@@ -3,13 +3,25 @@ import UserDetailsPage from "./UserDetailsPage/UserDetailsPage";
 import { AdminHeader } from "../../../components/AdminHeader/AdminHeader";
 import "./Users.css";
 import logoImage from "../../../assests/logo.png";
+import { useNavigate } from "react-router-dom";
 
 const UserDetails = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isHamburgerVisible, setIsHamburgerVisible] = useState(false);
+  const navigate = useNavigate();
 
   const toggleSidebar = (isOpen) => {
     setIsSidebarOpen(isOpen);
+  };
+
+  const handleLogout = () => {
+    try {
+      sessionStorage.removeItem("userDetails");
+      navigate("/login");
+      window.location.reload();
+    } catch (error) {
+      console.error("An error occurred while logging out:", error);
+    }
   };
 
   const sidebarLinks = [
@@ -46,9 +58,12 @@ const UserDetails = () => {
           <ul className={`navbar-links`}>
             {sidebarLinks.map((link, index) => (
               <li key={index}>
-                <a href={link.to} onClick={() => toggleSidebar(false)}>
+                <div
+                  className="link-like-element"
+                  onClick={() => (link.to === "/login" ? handleLogout() : navigate(link.to))}
+                >
                   {link.label}
-                </a>
+                </div>
               </li>
             ))}
           </ul>

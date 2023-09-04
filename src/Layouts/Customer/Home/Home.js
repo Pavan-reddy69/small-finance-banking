@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { DefaultSidebar } from "../../../components/SideNavbar/Sidebar";
 import DetailsComponent from "../../../components/AccDetails/Detail";
 import "./home.css";
@@ -7,7 +8,7 @@ import logoImage from "../../../assests/logo.png";
 const Land = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isHamburgerVisible, setIsHamburgerVisible] = useState(false);
-
+const navigate=useNavigate();
   const toggleSidebar = (isOpen) => {
     setIsSidebarOpen(isOpen);
   };
@@ -15,16 +16,25 @@ const Land = () => {
   const sidebarLinks = [
     { to: "/customer-home", label: "Home" },
     { to: "/transactions", label: "Transaction" },
-    { to: "/loan", label: "Loan"},
+    { to: "/loan", label: "Loan" },
     { to: "/deposit", label: "Deposit" },
-    { to: "/profile", label: "Settings"},
+    { to: "/profile", label: "Settings" },
     { to: "/login", label: "Logout" },
   ];
 
+  const handleLogout = async () => {
+    try {
+      sessionStorage.removeItem("userDetails");
+      navigate("/login");
+      window.location.reload();
+    } catch (error) {
+      console.error("An error occurred while logging out:", error);
+    }
+  };
 
   useEffect(() => {
     const handleResize = () => {
-      setIsHamburgerVisible(window.innerWidth <= 700); 
+      setIsHamburgerVisible(window.innerWidth <= 700);
     };
 
     handleResize(); // Check on initial render
@@ -35,6 +45,7 @@ const Land = () => {
     };
   }, []);
 
+ 
   return (
     <div className={`Home ${isSidebarOpen ? "sidebar-open" : ""}`}>
       {isHamburgerVisible && (
@@ -50,10 +61,12 @@ const Land = () => {
           <ul className={`navbar-links`}>
             {sidebarLinks.map((link, index) => (
               <li key={index}>
-                <a href={link.to} onClick={() => toggleSidebar(false)}>
-                  {link.icon}
+                <div
+                  className="link-like-element"
+                  onClick={() => (link.to === "/login" ? handleLogout() : navigate(link.to))}
+                >
                   {link.label}
-                </a>
+                </div>
               </li>
             ))}
           </ul>
