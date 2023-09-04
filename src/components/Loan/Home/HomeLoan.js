@@ -249,6 +249,7 @@ function HomeLoanComponent() {
       <HomeHistoryTable tableRefresh={tablRefresh} refreshTable={refreshTable} />
       <div className="sign-container">
         <h3>Apply for Home Loan</h3>
+        <p>1. <strong>Competitive Interest Rates:</strong> Our home loans feature competitive interest rates, with a fixed rate of 11% for one year, making homeownership more affordable.</p>
         {errorMsg && (
         <div
           className="otperror"

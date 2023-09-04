@@ -254,11 +254,11 @@ function EducationLoanComponent() {
           </Alert>
         </div>
       )}
-        <p>1. <strong>Competitive Interest Rates:</strong> Our education loans come with competitive interest rates that are designed to make financing your education affordable. We understand the importance of accessible education, and our interest rates reflect our commitment to helping you achieve your academic goals.</p>
+       <p>1. <strong>Competitive Interest Rates:</strong> Our education loans offer competitive interest rates, featuring a fixed rate of 9% for one year, to make financing your education more affordable and accessible.</p>
 
-        <p>2. <strong>Interest Rate Flexibility:</strong> We offer flexible interest rate options, including fixed and variable rates, allowing you to choose the option that best suits your financial preferences and circumstances. Fixed rates provide stability and predictability in your loan payments, while variable rates may offer lower initial costs.</p>
 
-        <p>3. <strong>Interest Subsidy for Eligible Candidates:</strong> For eligible candidates, we provide interest subsidies that can significantly reduce the overall cost of your education loan. These subsidies are aimed at supporting students from economically disadvantaged backgrounds, making higher education more accessible to all.</p>
+
+        <p>2. <strong>Interest Subsidy for Eligible Candidates:</strong> For eligible candidates, we provide interest subsidies that can significantly reduce the overall cost of your education loan. These subsidies are aimed at supporting students from economically disadvantaged backgrounds, making higher education more accessible to all.</p>
 
         <Stepper activeStep={activeStep} alternativeLabel>
           {steps.map(label => (

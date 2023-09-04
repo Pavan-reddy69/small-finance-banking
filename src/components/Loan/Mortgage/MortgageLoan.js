@@ -231,6 +231,7 @@ function PersonalLoanComponent() {
       <div className="sign-container">
 
         <h3>Apply for Personal Loan</h3>
+        
         {errorMsg && (
         <div className='otperror' style={{ marginTop: "-10px", paddingBottom: "10px" }}>
           <Alert severity="error" onClose={() => setErrorMsg(null)}>
@@ -245,6 +246,8 @@ function PersonalLoanComponent() {
           </Alert>
         </div>
       )}
+      <p>1. <strong>Competitive Interest Rates:</strong> Our personal loans offer competitive interest rates, featuring a fixed rate of 13% for one year, to help you achieve your financial goals with affordable borrowing.</p>
+
         <Stepper activeStep={activeStep} alternativeLabel>
           {steps.map(label => (
             <Step key={label}>
