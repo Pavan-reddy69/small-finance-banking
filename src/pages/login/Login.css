@@ -59,3 +59,9 @@ width:650px;
   justify-content: center;
   align-items: center;  
 }
+
+@media screen and (max-width: 768px) {
+  .besttext {
+ display: none;
+    }
+}

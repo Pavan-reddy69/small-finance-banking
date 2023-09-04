@@ -15,6 +15,7 @@ import './Login.css';
 import img2 from '../../assests/logo-removebg-preview (1).png';
 import api from '../../Api/api';
 import { TailSpin } from 'react-loader-spinner'; 
+import { Link } from 'react-router-dom';
 
 function Login() {
   const [isManagerLogin, setIsManagerLogin] = useState(false);
@@ -93,7 +94,9 @@ function Login() {
           <MDBCard className='my-5'>
             <MDBCardBody className='p-5'>
               <MDBRow>
+              <Link to="/"> 
                 <MDBCardImage src={img2} alt="login form" className='rounded-start w-100' />
+                </Link>
               </MDBRow>
               <MDBInput
                 onChange={(e) => setEmailOrAccount(e.target.value)}
