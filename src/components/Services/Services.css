@@ -35,7 +35,7 @@
   display: flex;
   align-items:center;
   justify-content: center;
-  width: 18% !important;
+  width: 18% ;
   height: 70px;
 }
 
@@ -49,15 +49,15 @@
   .service-card {
     width: calc(50% - 20px); 
   }
-}
+
 .service-card-image {
   display: flex;
   align-items:center;
   justify-content: center;
-  width: 28%;
+  width: 28% ;
   height: 70px;
 }
-
+}
 @media (max-width: 500px) {
   .service-card {
     width: calc(100% - 2px); 
