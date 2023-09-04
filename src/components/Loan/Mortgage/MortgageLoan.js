@@ -284,12 +284,14 @@ function PersonalLoanComponent() {
           {activeStep === 1 && (
             <div className='loan-documents'>
               <Typography variant="h5">Upload Documents</Typography>
+              <p>Salary Slip</p>
               <input
                 type="file"
                 accept=".pdf"
                 onChange={e => setSalarySlip(e.target.files[0])}
                 style={{ marginBottom: '20px', margintop: '50px' }}
               />
+               <p>Land Documents</p>
               <input
                 type="file"
                 accept=".pdf"
