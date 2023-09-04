@@ -50,6 +50,13 @@
     width: calc(50% - 20px); 
   }
 }
+.service-card-image {
+  display: flex;
+  align-items:center;
+  justify-content: center;
+  width: 28%;
+  height: 70px;
+}
 
 @media (max-width: 500px) {
   .service-card {
